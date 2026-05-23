@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   IconArrowRight, IconCalendarEvent, IconActivity,
-  IconArticle, IconExternalLink, IconMapPin,
+  IconArticle, IconExternalLink,
 } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 import { Site, socialLinks } from '../lib/config';
@@ -12,6 +12,8 @@ import Featured from '../components/Featured';
 import ThemeSelector from '../components/themes/ThemeSelector';
 import ColorSelector from '../components/themes/ColorSelector';
 import TimeWaster from '../components/bento/TimeWaster';
+import ClickerBox from "../components/bento/ClickerBox";
+import SpotifyBox from '../components/bento/SpotifyBox';
 
 export default function Home() {
   const [nameHovered, setNameHovered] = useState(false);
@@ -86,36 +88,10 @@ export default function Home() {
           </div>
 
           {/* Box 2: Book a chat */}
-          <div className="border-surface0 bg-canvas rounded-xl border p-4 shadow-lg">
-            <h3 className="text-text mb-3 flex items-center gap-2 text-sm font-semibold">
-              <IconCalendarEvent size={16} className="text-accent" />
-              Let's Connect
-            </h3>
-            <p className="text-subtext0 mb-4 text-sm">
-              Always open to interesting projects and conversations.
-            </p>
-            <a
-              href={Site.out.calcom}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-accent text-canvas inline-flex w-full items-center justify-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium shadow-sm transition-opacity hover:opacity-85"
-            >
-              <IconCalendarEvent size={16} />
-              Book a Chat
-            </a>
-          </div>
+          <ClickerBox />
 
-          {/* Box 3: Location */}
-          <div className="border-surface0 bg-canvas rounded-xl border p-4 shadow-lg">
-            <h3 className="text-text mb-3 flex items-center gap-2 text-sm font-semibold">
-              <IconMapPin size={16} className="text-accent" />
-              Location
-            </h3>
-            <div className="bg-surface0 flex flex-col items-center justify-center rounded-lg p-6 text-center">
-              <p className="text-text font-medium">Your City</p>
-              <p className="text-subtext0 text-sm">Your Country</p>
-            </div>
-          </div>
+          {/* Box 3: Spotify */}
+          <SpotifyBox />
 
           {/* Box 4: Time Waster (Snake) */}
           <TimeWaster />

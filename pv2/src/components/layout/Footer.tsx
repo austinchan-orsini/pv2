@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IconClock, IconBrandGithub, IconBrandLinkedin } from '@tabler/icons-react';
 import { Site } from '../../lib/config';
+import { hitCounter } from '../../lib/abacus';
 
 function formatTime(s: number) {
   const h = Math.floor(s / 3600);
@@ -13,7 +14,16 @@ function formatTime(s: number) {
 export default function Footer() {
   const [timeOnSite, setTimeOnSite] = useState('00:00');
   const year = new Date().getFullYear();
+  const [views, setViews] = useState<number | null>(null);
+  const hasHitView = useRef(false);
+  useEffect(() => {
+    if (hasHitView.current) return;
+    hasHitView.current = true;
 
+    hitCounter('site-views')
+      .then(setViews)
+      .catch(console.error);  
+  }, []);
   useEffect(() => {
     const start = Date.now();
     const stored = Number(localStorage.getItem('total-time-on-site') ?? 0);
@@ -47,30 +57,31 @@ export default function Footer() {
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="flex items-center gap-1.5" title="Time on site">
-            <IconClock size={14} className="text-subtext1" />
-            <span className="text-accent font-mono text-xs">{timeOnSite}</span>
-          </span>
-          <span className="text-surface0">—</span>
-          <a
-            href={Site.out.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub"
-            className="text-subtext1 hover:text-accent transition-colors"
-          >
-            <IconBrandGithub size={16} stroke={1.5} />
-          </a>
-          <a
-            href={Site.out.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            className="text-subtext1 hover:text-accent transition-colors"
-          >
-            <IconBrandLinkedin size={16} stroke={1.5} />
-          </a>
-        </div>
+  <span className="flex items-center gap-1.5" title="Time on site">
+    <IconClock size={14} className="text-subtext1" />
+    <span className="text-accent font-mono text-xs">{timeOnSite}</span>
+  </span>
+
+  <span className="text-surface0">—</span>
+
+  <span className="text-subtext1 text-xs font-mono">
+    {views === null ? '...' : views.toLocaleString()} views
+  </span>
+
+  <span className="text-surface0">—</span>
+
+  <span className="text-subtext1 text-xs font-mono">⎇ 448b603</span>
+
+  <span className="text-surface0">—</span>
+
+  <a href={Site.out.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-subtext1 hover:text-accent transition-colors">
+    <IconBrandGithub size={16} stroke={1.5} />
+  </a>
+
+  <a href={Site.out.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-subtext1 hover:text-accent transition-colors">
+    <IconBrandLinkedin size={16} stroke={1.5} />
+  </a>
+</div>
       </footer>
     </div>
   );

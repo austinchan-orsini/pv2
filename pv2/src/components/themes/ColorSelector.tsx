@@ -25,7 +25,7 @@ export default function ColorSelector() {
   return (
     <div>
       <p className="text-subtext0 mb-2 text-xs font-semibold uppercase tracking-wider">Accent</p>
-      <div className="flex flex-wrap gap-1.5">
+      <div className="grid grid-cols-7 gap-1.5">
         {accents.map((a) => {
           const color = a.hex[flavour] ?? a.hex.mocha;
           return (

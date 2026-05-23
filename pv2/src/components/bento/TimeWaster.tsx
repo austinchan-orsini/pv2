@@ -58,7 +58,6 @@ export default function TimeWaster() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const map: Record<string, Dir> = {
-        ArrowUp: 'U', ArrowDown: 'D', ArrowLeft: 'L', ArrowRight: 'R',
         w: 'U', s: 'D', a: 'L', d: 'R',
       };
       const next = map[e.key];
@@ -127,7 +126,7 @@ export default function TimeWaster() {
         )}
       </div>
 
-      <p className="text-subtext0 mt-2 text-center text-xs">Arrow keys / WASD to move</p>
+      <p className="text-subtext0 mt-2 text-center text-xs">WASD to move</p>
     </div>
   );
 }
