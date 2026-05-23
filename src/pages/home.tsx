@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
-  IconArrowRight, IconCalendarEvent, IconActivity,
-  IconArticle, IconExternalLink,
+  IconArrowRight, IconActivity,
 } from '@tabler/icons-react';
+
+type Commit = { message: string; repo: string; repoUrl: string; sha: string; date: string };
 import { Link } from 'react-router-dom';
 import { Site, socialLinks } from '../lib/config';
-import { featuredProjects, posts } from '../lib/data';
+import { featuredProjects } from '../lib/data';
 import LinkWithIcon from '../components/LinkWithIcon';
 import Experience from '../components/Experience';
 import Featured from '../components/Featured';
@@ -14,9 +15,18 @@ import ColorSelector from '../components/themes/ColorSelector';
 import TimeWaster from '../components/bento/TimeWaster';
 import ClickerBox from "../components/bento/ClickerBox";
 import SpotifyBox from '../components/bento/SpotifyBox';
+import FunFactsBox from '../components/bento/FunFactsBox';
 
 export default function Home() {
   const [nameHovered, setNameHovered] = useState(false);
+  const [commits, setCommits] = useState<Commit[] | null>(null);
+
+  useEffect(() => {
+    fetch('/api/github')
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then(setCommits)
+      .catch(() => setCommits([]));
+  }, []);
 
   return (
     <div className="mx-auto max-w-6xl space-y-12 px-0 py-8 md:space-y-16 md:px-4 md:py-12">
@@ -81,11 +91,8 @@ export default function Home() {
         <h2 className="sr-only">Dashboard</h2>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-6 lg:grid-cols-4">
 
-          {/* Box 1: Theme Selector */}
-          <div className="border-surface0 bg-canvas rounded-xl border p-4 shadow-lg sm:col-span-2 lg:col-span-1 space-y-3">
-            <ThemeSelector />
-            <ColorSelector />
-          </div>
+          {/* Box 1: Fun Facts */}
+          <FunFactsBox />
 
           {/* Box 2: Book a chat */}
           <ClickerBox />
@@ -104,7 +111,7 @@ export default function Home() {
                 Recent Activity
               </h3>
               <a
-                href={Site.out.github}
+                href="https://github.com/austinchan-orsini"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-accent/80 hover:text-accent text-xs font-medium transition-colors"
@@ -112,49 +119,40 @@ export default function Home() {
                 GitHub ↗
               </a>
             </div>
-            <p className="text-subtext1 text-sm italic">
-              Connect the GitHub API in{' '}
-              <code className="bg-surface0 text-text rounded px-1 py-0.5 text-xs">src/lib/data.ts</code>{' '}
-              to show live commits here.
-            </p>
-          </div>
-
-          {/* Box 6: Latest Posts */}
-          <div className="border-surface0 bg-canvas rounded-xl border p-4 shadow-lg sm:col-span-2">
-            <div className="mb-3 flex items-center justify-between gap-2 text-sm">
-              <h3 className="text-text flex items-center gap-2 font-semibold">
-                <IconArticle size={14} className="text-accent" />
-                Latest Posts
-              </h3>
-              <Link
-                to="/posts"
-                aria-label="View all posts"
-                className="text-accent/80 hover:text-accent transition-colors"
-              >
-                <IconExternalLink size={16} />
-              </Link>
-            </div>
-            {posts.length > 0 ? (
+            {!commits ? (
+              <div className="space-y-2">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="bg-surface0 animate-pulse h-8 rounded" />
+                ))}
+              </div>
+            ) : commits.length === 0 ? (
+              <p className="text-subtext1 text-sm italic">No recent activity.</p>
+            ) : (
               <ul className="space-y-2">
-                {posts.slice(0, 4).map((post) => (
-                  <li key={post.slug}>
-                    <Link
-                      to={`/posts/${post.slug}`}
-                      className="text-subtext0 hover:text-accent flex min-w-0 items-center gap-2 text-sm"
+                {commits.map((c) => (
+                  <li key={c.sha} className="flex items-start gap-2 text-sm min-w-0">
+                    <a
+                      href={c.repoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-accent shrink-0 text-xs font-mono mt-0.5 hover:underline"
                     >
-                      <span className="min-w-0 flex-1 truncate">{post.title}</span>
-                      <span className="text-surface1 text-xs flex-shrink-0">
-                        {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                          month: 'short', day: 'numeric', year: 'numeric',
-                        })}
-                      </span>
-                    </Link>
+                      {c.repo}
+                    </a>
+                    <span className="text-subtext0 truncate">{c.message}</span>
+                    <span className="text-surface1 text-xs shrink-0 ml-auto">
+                      {new Date(c.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    </span>
                   </li>
                 ))}
               </ul>
-            ) : (
-              <p className="text-subtext1 text-xs italic">No posts yet.</p>
             )}
+          </div>
+
+          {/* Box 6: Theme Selector */}
+          <div className="border-surface0 bg-canvas rounded-xl border p-4 shadow-lg sm:col-span-2 space-y-3">
+            <ThemeSelector />
+            <ColorSelector />
           </div>
         </div>
       </section>

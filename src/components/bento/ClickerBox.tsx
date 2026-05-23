@@ -49,7 +49,7 @@ export default function ClickerBox() {
   };
 
   return (
-    <div className="border-surface0 bg-canvas rounded-xl border p-6 text-center shadow-lg">
+    <div className="border-surface0 bg-canvas rounded-xl border p-6 shadow-lg flex flex-col items-center justify-center h-full">
       <div className="mb-5 text-4xl font-bold tracking-widest text-accent">
         {total.toLocaleString()}
       </div>
