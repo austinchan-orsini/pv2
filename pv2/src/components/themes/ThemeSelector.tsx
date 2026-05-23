@@ -6,17 +6,23 @@ export default function ThemeSelector() {
   const isLight = flavour === 'latte';
 
   return (
-    <div>
-      <p className="text-subtext0 mb-2 text-xs font-semibold uppercase tracking-wider">
-        Theme
-      </p>
-
+    <div className="flex items-center justify-between">
+      <span className="text-subtext0 text-xs font-semibold uppercase tracking-wider">
+        {isLight ? '☀︎ Day' : '☾ Night'}
+      </span>
       <button
+        role="switch"
+        aria-checked={isLight}
         onClick={() => setFlavour(isLight ? 'frappe' : 'latte')}
-        className="bg-surface0 text-subtext1 flex w-full items-center justify-between rounded-md px-3 py-2 text-xs font-medium transition-colors hover:text-text"
+        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
+          isLight ? 'bg-accent' : 'bg-surface1'
+        }`}
       >
-        <span>{isLight ? 'Day' : 'Night'}</span>
-        <span className="text-accent">{isLight ? '☀︎' : '☾'}</span>
+        <span
+          className={`inline-block h-3.5 w-3.5 rounded-full bg-white shadow transition-transform ${
+            isLight ? 'translate-x-4' : 'translate-x-1'
+          }`}
+        />
       </button>
     </div>
   );
