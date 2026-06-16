@@ -20,17 +20,21 @@ const init = () => {
   return { snake, food: rand(snake), dir: 'R' as Dir, alive: true, score: 0 };
 };
 
+const OPPOSITES: Record<Dir, Dir> = { U: 'D', D: 'U', L: 'R', R: 'L' };
+
 export default function TimeWaster() {
   const [state, setState] = useState(init);
-  const dirRef = useRef<Dir>('R');
+  // Queue of upcoming directions — validated against the tail of the queue,
+  // consumed one per tick. Prevents "two keys between ticks = instant death".
+  const dirQueueRef = useRef<Dir[]>(['R']);
   const aliveRef = useRef(true);
-  const stateRef = useRef(state);
-  stateRef.current = state;
 
   const tick = useCallback(() => {
     if (!aliveRef.current) return;
     setState((prev) => {
-      const d = dirRef.current;
+      const d = dirQueueRef.current[0];
+      if (dirQueueRef.current.length > 1) dirQueueRef.current.shift();
+
       const head = prev.snake[0];
       const next = {
         x: (head.x + (d === 'R' ? 1 : d === 'L' ? -1 : 0) + COLS) % COLS,
@@ -43,7 +47,7 @@ export default function TimeWaster() {
       return {
         snake: newSnake,
         food: ate ? rand(newSnake) : prev.food,
-        dir: prev.dir,
+        dir: d,
         alive: true,
         score: ate ? prev.score + 1 : prev.score,
       };
@@ -57,13 +61,14 @@ export default function TimeWaster() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      const map: Record<string, Dir> = {
-        w: 'U', s: 'D', a: 'L', d: 'R',
-      };
+      const map: Record<string, Dir> = { w: 'U', s: 'D', a: 'L', d: 'R' };
       const next = map[e.key];
       if (!next) return;
-      const opposites: Record<Dir, Dir> = { U: 'D', D: 'U', L: 'R', R: 'L' };
-      if (next !== opposites[dirRef.current]) dirRef.current = next;
+      // Validate against the last queued direction, not the currently-traveling one
+      const last = dirQueueRef.current[dirQueueRef.current.length - 1];
+      if (next !== OPPOSITES[last] && next !== last && dirQueueRef.current.length < 3) {
+        dirQueueRef.current.push(next);
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -71,7 +76,7 @@ export default function TimeWaster() {
 
   const restart = () => {
     aliveRef.current = true;
-    dirRef.current = 'R';
+    dirQueueRef.current = ['R'];
     setState(init());
   };
 
