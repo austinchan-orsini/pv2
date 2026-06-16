@@ -50,7 +50,9 @@ export default function Sidebar({ isOpen, onClose }: Props) {
                   to={item.href}
                   onClick={onClose}
                   aria-current={pathname === item.href ? 'page' : undefined}
-                  className="hover:bg-surface0 block rounded p-2 text-sm transition-colors"
+                  className={`block rounded p-2 text-sm transition-colors ${
+                    pathname === item.href ? 'text-accent' : 'hover:bg-surface0'
+                  }`}
                 >
                   {item.title}
                 </Link>
@@ -77,7 +79,9 @@ export default function Sidebar({ isOpen, onClose }: Props) {
                     to={item.href}
                     onClick={onClose}
                     aria-current={pathname === item.href ? 'page' : undefined}
-                    className="hover:bg-surface0 block rounded p-2 text-sm transition-colors"
+                    className={`block rounded p-2 text-sm transition-colors ${
+                      pathname === item.href ? 'text-accent' : 'hover:bg-surface0'
+                    }`}
                   >
                     {item.title}
                   </Link>

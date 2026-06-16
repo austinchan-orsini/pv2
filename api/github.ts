@@ -32,7 +32,7 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
 
     const pushEvents = events
       .filter((e) => e.type === 'PushEvent')
-      .slice(0, 5);
+      .slice(0, 3);
 
     const commits = await Promise.all(
       pushEvents.map(async (e) => {
@@ -57,13 +57,16 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
             { headers }
           );
           if (!commitRes.ok) return null;
-          const commit = await commitRes.json() as { commit: { message: string }; sha: string };
+          const commit = await commitRes.json() as { commit: { message: string }; sha: string; stats?: { additions: number; deletions: number }; html_url: string };
           return {
             message: commit.commit.message.split('\n')[0].slice(0, 72),
             repo: e.repo.name.replace(`${USERNAME}/`, ''),
             repoUrl: `https://github.com/${e.repo.name}`,
+            commitUrl: commit.html_url,
             sha: sha.slice(0, 7),
             date: e.created_at,
+            additions: commit.stats?.additions,
+            deletions: commit.stats?.deletions,
           };
         } catch {
           return null;

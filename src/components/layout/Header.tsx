@@ -1,11 +1,12 @@
 import { IconMenu2 } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { mainNavItems } from '../../lib/config';
 import Breadcrumb from './Breadcrumb';
 
 type Props = { onToggleSidebar: () => void };
 
 export default function Header({ onToggleSidebar }: Props) {
+  const { pathname } = useLocation();
   return (
     <header
       className="sticky top-0 z-10 flex h-20 items-center justify-between px-5"
@@ -33,17 +34,13 @@ export default function Header({ onToggleSidebar }: Props) {
           <Link
             key={item.href}
             to={item.href}
-            className="text-text hover:text-accent rounded px-3 py-2 text-sm font-medium transition-colors duration-150"
+            className={`rounded px-3 py-2 text-sm font-medium transition-colors duration-150 ${
+              pathname === item.href ? 'text-accent' : 'text-text hover:text-accent'
+            }`}
           >
             {item.title}
           </Link>
         ))}
-        <button
-          onClick={onToggleSidebar}
-          className="text-text hover:text-accent cursor-pointer rounded px-3 py-2 text-sm font-medium transition-colors"
-        >
-          More...
-        </button>
       </nav>
     </header>
   );

@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { IconSparkles, IconDice } from '@tabler/icons-react';
 
 const facts = [
-  "I've visited over 12 countries before turning 25.",
-  "I learned to code by modding Minecraft plugins in Java.",
-  "I can solve a Rubik's cube in under 2 minutes.",
-  "My first computer was a Gateway running Windows XP.",
-  "I once stayed awake for 36 hours debugging a race condition.",
-  "I make my own cold brew coffee every week.",
-  "I played competitive chess in high school.",
-  "I type at ~110 WPM on a good day.",
+  "My iPhone stopwatch has been running nonstop since April 9, 2024 (Around 20,000 hours!)",
+  "My first coding project was making a pizza clicker game on Scratch in fourth grade",
+  "My best Rubik's Cube solve so far is 15.81 seconds using the MoYu WeiLong Ferrocore",
+  "My highest chess.com rating so far is 1632 on Rapid",
+  "I missed a ping pong game in high school and my coach made me join the track team",
+  "My highest on MonkeyType was 148 WPM on a 15 second test although I avg ~120 WPM",
+  "I achieved perfection for Stardew Valley during Spring of Year 3",
+  "It took me 9,532 deaths to beat Celeste",
 ];
 
 export default function FunFactsBox() {
