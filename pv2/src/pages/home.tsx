@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import {
-  IconArrowRight, IconActivity,
+  IconArrowRight, IconActivity, IconBrandGithub, IconBrandLinkedin, IconExternalLink,
 } from '@tabler/icons-react';
-
-type Commit = { message: string; repo: string; repoUrl: string; sha: string; date: string };
 import { Link } from 'react-router-dom';
 import { Site, socialLinks } from '../lib/config';
+
+type Commit = { message: string; repo: string; repoUrl: string; commitUrl: string; sha: string; date: string; additions?: number; deletions?: number };
 import { featuredProjects } from '../lib/data';
 import LinkWithIcon from '../components/LinkWithIcon';
 import Experience from '../components/Experience';
@@ -61,6 +61,15 @@ export default function Home() {
         </p>
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-2">
+          <a href={Site.out.github} target="_blank" rel="noopener noreferrer"
+            className="text-subtext1 hover:text-accent transition-colors">
+            <IconBrandGithub size={20} />
+          </a>
+          <a href={Site.out.linkedin} target="_blank" rel="noopener noreferrer"
+            className="text-subtext1 hover:text-accent transition-colors">
+            <IconBrandLinkedin size={20} />
+          </a>
+          <span className="text-surface1 text-xs">|</span>
           {socialLinks.map((link, i) => (
             <span key={link.href} className="flex items-center gap-4">
               <LinkWithIcon href={link.href} text={link.text} external={link.external} className="text-sm" />
@@ -91,8 +100,11 @@ export default function Home() {
         <h2 className="sr-only">Dashboard</h2>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-6 lg:grid-cols-4">
 
-          {/* Box 1: Fun Facts */}
-          <FunFactsBox />
+          {/* Box 1: Theme Selector */}
+          <div className="border-surface0 bg-canvas rounded-xl border p-4 shadow-lg space-y-3">
+            <ThemeSelector />
+            <ColorSelector />
+          </div>
 
           {/* Box 2: Book a chat */}
           <ClickerBox />
@@ -103,56 +115,60 @@ export default function Home() {
           {/* Box 4: Time Waster (Snake) */}
           <TimeWaster />
 
-          {/* Box 5: Recent Activity */}
-          <div className="border-surface0 bg-canvas rounded-xl border p-4 shadow-lg md:col-span-2">
+          {/* Box 5: Recent Commits */}
+          <div className="border-surface0 bg-canvas rounded-xl border p-4 shadow-lg md:col-span-2 flex flex-col">
             <div className="text-text mb-3 flex items-center justify-between gap-2 text-sm">
               <h3 className="flex items-center gap-2 font-semibold">
                 <IconActivity size={16} className="text-accent" />
-                Recent Activity
+                Recent Commits
               </h3>
-              <a
-                href="https://github.com/austinchan-orsini"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-accent/80 hover:text-accent text-xs font-medium transition-colors"
-              >
-                GitHub ↗
-              </a>
+              <span className="text-surface1 font-mono text-xs">[info]</span>
             </div>
             {!commits ? (
               <div className="space-y-2">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="bg-surface0 animate-pulse h-8 rounded" />
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="bg-surface0 animate-pulse h-7 rounded" />
                 ))}
               </div>
             ) : commits.length === 0 ? (
               <p className="text-subtext1 text-sm italic">No recent activity.</p>
             ) : (
-              <ul className="space-y-2">
+              <ul className="space-y-1 flex-1">
                 {commits.map((c) => (
-                  <li key={c.sha} className="flex items-start gap-2 text-sm min-w-0">
+                  <li key={c.sha}>
                     <a
-                      href={c.repoUrl}
+                      href={c.commitUrl ?? c.repoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-accent shrink-0 text-xs font-mono mt-0.5 hover:underline"
+                      className="hover:bg-surface0 group flex items-center gap-2 rounded px-1 py-1.5 text-sm min-w-0 transition-colors"
                     >
-                      {c.repo}
+                      <span className="text-accent font-mono shrink-0">{c.repo}:</span>
+                      <span className="text-subtext0 truncate flex-1">{c.message}</span>
+                      {c.additions != null && (
+                        <span className="shrink-0 font-mono text-xs">
+                          <span className="text-green">+{c.additions}</span>
+                          <span className="text-overlay0"> / </span>
+                          <span className="text-red">-{c.deletions}</span>
+                        </span>
+                      )}
                     </a>
-                    <span className="text-subtext0 truncate">{c.message}</span>
-                    <span className="text-surface1 text-xs shrink-0 ml-auto">
-                      {new Date(c.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                    </span>
                   </li>
                 ))}
               </ul>
             )}
+            <a
+              href="https://github.com/austinchan-orsini"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent hover:text-accent/80 mt-3 flex items-center gap-1 text-xs font-medium transition-colors border-t border-surface0 pt-3"
+            >
+              View on GitHub <IconExternalLink size={12} />
+            </a>
           </div>
 
-          {/* Box 6: Theme Selector */}
-          <div className="border-surface0 bg-canvas rounded-xl border p-4 shadow-lg sm:col-span-2 space-y-3">
-            <ThemeSelector />
-            <ColorSelector />
+          {/* Box 6: Fun Facts */}
+          <div className="sm:col-span-2">
+            <FunFactsBox />
           </div>
         </div>
       </section>

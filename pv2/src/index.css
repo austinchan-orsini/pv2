@@ -196,3 +196,18 @@ body {
   50%       { opacity: 0; }
 }
 .cursor-blink { animation: blink 1.2s step-start infinite; }
+
+/* ─── Project detail animations ──────────────────────────────────────────── */
+@keyframes gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes orb-float {
+  from { transform: translateY(0px) scale(1); }
+  to   { transform: translateY(-28px) scale(1.06); }
+}
+@keyframes shine-sweep {
+  from { transform: translateX(-100%) skewX(-15deg); }
+  to   { transform: translateX(300%) skewX(-15deg); }
+}
