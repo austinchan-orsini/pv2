@@ -1,6 +1,9 @@
 import { IconFolders } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 import { projects } from '../lib/data';
+import ProjectThumb from '../components/ProjectThumb';
+import { tagColor } from '../lib/tagColor';
+import { parseLocalDate } from '../lib/date';
 
 export default function Projects() {
   return (
@@ -18,22 +21,14 @@ export default function Projects() {
               to={`/projects/${project.slug}`}
               className="border-hairline bg-paper hover:border-ink group block space-y-3 rounded-xl border p-5 transition-colors duration-200"
             >
-              {project.image ? (
-                <img
-                  src={project.image.url}
-                  alt={project.image.alt}
-                  className="mb-4 aspect-video w-full rounded-md object-cover"
-                />
-              ) : (
-                <div className="bg-bar-track mb-4 aspect-video w-full rounded-md" />
-              )}
+              <ProjectThumb project={project} className="mb-4 rounded-md" />
 
               <div className="flex items-center justify-between gap-3">
                 <h2 className="text-ink group-hover:text-mark min-w-0 flex-1 truncate text-xl font-semibold transition-colors">
                   {project.title}
                 </h2>
                 <p className="text-ink-muted flex-shrink-0 text-xs whitespace-nowrap">
-                  {new Date(project.date).getFullYear()}
+                  {parseLocalDate(project.date).getFullYear()}
                 </p>
               </div>
 
@@ -42,7 +37,15 @@ export default function Projects() {
               {project.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1.5">
                   {project.tags.map((tag) => (
-                    <span key={tag} className="bg-bar-track text-ink-muted rounded px-2 py-0.5 text-xs">
+                    <span
+                      key={tag}
+                      className="rounded px-2 py-0.5 text-xs"
+                      style={{
+                        color: 'var(--ink-secondary)',
+                        backgroundColor: `${tagColor(tag)}40`,
+                        border: `1px solid ${tagColor(tag)}80`,
+                      }}
+                    >
                       {tag}
                     </span>
                   ))}

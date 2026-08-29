@@ -2,6 +2,8 @@ import { IconX } from '@tabler/icons-react';
 import { Link, useLocation } from 'react-router-dom';
 import { mainNavItems, moreNavItems } from '../../lib/config';
 
+const NAV_SWEEP = ['sweep-mint', 'sweep-butter', 'sweep-coral', 'sweep-mark'];
+
 type Props = { isOpen: boolean; onClose: () => void };
 
 export default function Sidebar({ isOpen, onClose }: Props) {
@@ -37,7 +39,7 @@ export default function Sidebar({ isOpen, onClose }: Props) {
 
         <nav className="flex-1 overflow-y-auto p-4">
           <ul className="space-y-1" role="list">
-            {mainNavItems.map((item) => (
+            {mainNavItems.map((item, i) => (
               <li key={item.href}>
                 <Link
                   to={item.href}
@@ -46,7 +48,7 @@ export default function Sidebar({ isOpen, onClose }: Props) {
                   className="text-ink hover:bg-row-hover block rounded p-2 text-sm"
                 >
                   <span
-                    className={`sweep sweep-butter ${pathname === item.href ? 'sweep-active' : ''}`}
+                    className={`sweep ${NAV_SWEEP[i % NAV_SWEEP.length]} ${pathname === item.href ? 'sweep-active' : ''}`}
                   >
                     {item.title}
                   </span>
@@ -57,7 +59,7 @@ export default function Sidebar({ isOpen, onClose }: Props) {
             <li><hr className="border-hairline my-2" /></li>
             <li className="text-ink-secondary px-2 py-1 text-xs font-semibold tracking-wider uppercase">More</li>
 
-            {moreNavItems.map((item) => (
+            {moreNavItems.map((item, i) => (
               <li key={item.href}>
                 {item.external ? (
                   <a
@@ -67,7 +69,7 @@ export default function Sidebar({ isOpen, onClose }: Props) {
                     onClick={onClose}
                     className="hover:bg-row-hover block rounded p-2 text-sm"
                   >
-                    <span className="sweep sweep-butter">{item.title}</span>
+                    <span className={`sweep ${NAV_SWEEP[i % NAV_SWEEP.length]}`}>{item.title}</span>
                   </a>
                 ) : (
                   <Link
@@ -77,7 +79,7 @@ export default function Sidebar({ isOpen, onClose }: Props) {
                     className="hover:bg-row-hover block rounded p-2 text-sm"
                   >
                     <span
-                      className={`sweep sweep-butter ${pathname === item.href ? 'sweep-active' : ''}`}
+                      className={`sweep ${NAV_SWEEP[i % NAV_SWEEP.length]} ${pathname === item.href ? 'sweep-active' : ''}`}
                     >
                       {item.title}
                     </span>

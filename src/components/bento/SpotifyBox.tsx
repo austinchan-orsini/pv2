@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { IconMusic, IconPlayerPlay } from '@tabler/icons-react';
+import { IconMusic } from '@tabler/icons-react';
 
 interface SpotifyTrack {
   isPlaying: boolean;
@@ -25,7 +25,6 @@ export default function SpotifyBox() {
       <h3 className="text-ink mb-3 flex items-center gap-2 text-sm font-semibold shrink-0">
         <IconMusic size={16} className="text-mark" />
         {track?.isPlaying ? 'Now Playing' : 'Last Played'}
-        {track?.isPlaying && <IconPlayerPlay size={14} className="text-mark" />}
       </h3>
 
       <a

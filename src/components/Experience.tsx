@@ -1,10 +1,12 @@
+import { Link } from 'react-router-dom';
+import { IconArrowRight } from '@tabler/icons-react';
 import { experiences } from '../lib/data';
 
 export default function Experience() {
   return (
     <section className="px-4 md:px-0">
       <div className="border-hairline divide-hairline divide-y rounded-xl border">
-        {experiences.map((exp, i) => (
+        {experiences.slice(0, 3).map((exp, i) => (
           <div key={i} className="flex items-center justify-between px-4 py-3">
             <div>
               {exp.url ? (
@@ -25,6 +27,14 @@ export default function Experience() {
           </div>
         ))}
       </div>
+
+      <Link
+        to="/experience"
+        className="group mt-3 inline-flex items-center gap-1 text-sm"
+      >
+        <span className="sweep sweep-mint text-ink-muted">Experience</span>
+        <IconArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+      </Link>
     </section>
   );
 }

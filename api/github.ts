@@ -14,57 +14,50 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
       headers['Authorization'] = `Bearer ${process.env.GITHUB_TOKEN}`;
     }
 
-    const eventsRes = await fetch(
-      `https://api.github.com/users/${USERNAME}/events/public?per_page=30`,
+    // The public events feed is unreliable (often empty even with recent
+    // pushes), so pull the most recently pushed repos and read each one's
+    // latest commit directly instead.
+    const reposRes = await fetch(
+      `https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=pushed`,
       { headers }
     );
 
-    if (!eventsRes.ok) {
-      return res.status(eventsRes.status).json({ error: 'GitHub API error' });
+    if (!reposRes.ok) {
+      return res.status(reposRes.status).json({ error: 'GitHub API error' });
     }
 
-    const events = await eventsRes.json() as {
-      type: string;
-      repo: { name: string };
-      payload: { commits?: { message: string; sha: string }[]; head?: string };
-      created_at: string;
+    const repos = await reposRes.json() as {
+      name: string;
+      fork: boolean;
+      default_branch: string;
+      pushed_at: string;
     }[];
 
-    const pushEvents = events
-      .filter((e) => e.type === 'PushEvent')
-      .slice(0, 3);
+    const topRepos = repos.filter((r) => !r.fork).slice(0, 3);
 
     const commits = await Promise.all(
-      pushEvents.map(async (e) => {
-        // use inline commits if present, otherwise fetch by head SHA
-        const inlineCommit = e.payload.commits?.[0];
-        if (inlineCommit) {
-          return {
-            message: inlineCommit.message.split('\n')[0].slice(0, 72),
-            repo: e.repo.name.replace(`${USERNAME}/`, ''),
-            repoUrl: `https://github.com/${e.repo.name}`,
-            sha: inlineCommit.sha.slice(0, 7),
-            date: e.created_at,
-          };
-        }
-
-        const sha = e.payload.head;
-        if (!sha) return null;
-
+      topRepos.map(async (repo) => {
         try {
           const commitRes = await fetch(
-            `https://api.github.com/repos/${e.repo.name}/commits/${sha}`,
+            `https://api.github.com/repos/${USERNAME}/${repo.name}/commits/${repo.default_branch}`,
             { headers }
           );
           if (!commitRes.ok) return null;
-          const commit = await commitRes.json() as { commit: { message: string }; sha: string; stats?: { additions: number; deletions: number }; html_url: string };
+
+          const commit = await commitRes.json() as {
+            sha: string;
+            html_url: string;
+            commit: { message: string };
+            stats?: { additions: number; deletions: number };
+          };
+
           return {
             message: commit.commit.message.split('\n')[0].slice(0, 72),
-            repo: e.repo.name.replace(`${USERNAME}/`, ''),
-            repoUrl: `https://github.com/${e.repo.name}`,
+            repo: repo.name,
+            repoUrl: `https://github.com/${USERNAME}/${repo.name}`,
             commitUrl: commit.html_url,
-            sha: sha.slice(0, 7),
-            date: e.created_at,
+            sha: commit.sha.slice(0, 7),
+            date: repo.pushed_at,
             additions: commit.stats?.additions,
             deletions: commit.stats?.deletions,
           };

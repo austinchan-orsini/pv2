@@ -35,6 +35,8 @@
 /* ─── Base styles ─────────────────────────────────────────────────────────── */
 html {
   scroll-padding-top: 5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--coral) var(--paper);
 }
 
 body {
@@ -42,6 +44,23 @@ body {
   color: var(--ink);
   font-family: var(--font-sans);
   margin: 0;
+}
+
+/* ─── Custom scrollbar (WebKit) ─────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--paper);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--coral);
+  border-radius: 9999px;
+  border: 2px solid var(--paper);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--mark);
 }
 
 /* ─── Highlight-sweep hover: a marker drawn upward from the baseline ───────── */
@@ -60,8 +79,10 @@ body {
 .sweep-active {
   background-size: 100% 100%;
 }
+.sweep-mint   { --sweep-color: var(--mint); }
 .sweep-butter { --sweep-color: var(--butter); }
 .sweep-coral  { --sweep-color: var(--coral); }
+.sweep-mark   { --sweep-color: var(--mark); }
 
 @media (prefers-reduced-motion: reduce) {
   .sweep { transition: none; }

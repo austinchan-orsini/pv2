@@ -3,14 +3,11 @@ import { hitCounter, getCounter } from "../../lib/abacus";
 
 export default function ClickerBox() {
   const [total, setTotal] = useState(0);
-  const [userClicks, setUserClicks] = useState(0);
+  const [userClicks, setUserClicks] = useState(() => Number(localStorage.getItem("clicks") ?? 0));
   const pendingClicks = useRef(0);
 
   useEffect(() => {
     getCounter("global-clicks").then(setTotal).catch(console.error);
-
-    const saved = localStorage.getItem("clicks");
-    if (saved) setUserClicks(Number(saved));
   }, []);
 
   useEffect(() => {

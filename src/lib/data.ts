@@ -5,13 +5,16 @@ export type Project = {
   date: string;
   tags: string[];
   image?: { url: string; alt: string };
+  screenshots?: { url: string; alt: string }[];
+  screenshotAspect?: string;
+  stackedMedia?: boolean;
   links?: { label: string; url: string; icon?: string }[];
   featured?: boolean;
   // Detail page content
   longDescription?: string;
-  features?: { iconName: string; title: string; description: string }[];
-  stats?: { label: string; value: number; suffix?: string }[];
-  codeSnippet?: { lang: string; filename: string; code: string };
+  realWorldValue?: string;
+  features?: { title: string; description: string }[];
+  heroBadge?: { label: string; value: number; suffix?: string };
   gradientVars?: [string, string, string, string];
 };
 
@@ -26,15 +29,124 @@ export type Experience = {
   company: string;
   role: string;
   period: string;
+  location?: string;
+  url?: string;
+  bullets: string[];
+};
+
+export type Education = {
+  school: string;
+  degree: string;
+  period: string;
+  location?: string;
+  gpa?: string;
+  coursework?: string[];
   url?: string;
 };
 
-// ─── Experience ───────────────────────────────────────────────────────────────
+export type LeadershipRole = {
+  org: string;
+  role: string;
+  period: string;
+  bullets: string[];
+};
+
+// ─── Education ──────────────────────────────────────────────────────────────
+
+export const education: Education[] = [
+  {
+    school: 'Boston College',
+    degree: 'B.S. in Computer Science and Mathematics',
+    period: 'Expected May 2028',
+    location: 'Chestnut Hill, MA',
+    gpa: '3.6/4.0',
+    coursework: ['Data Structures & Algorithms', 'Operating Systems', 'Networks', 'Software Engineering'],
+    url: 'https://www.bc.edu',
+  },
+];
+
+// ─── Experience ─────────────────────────────────────────────────────────────
+// Most recent first — the home page shows the first 3.
 
 export const experiences: Experience[] = [
-  { company: 'Your Company', role: 'Software Engineer', period: '2024 – Present', url: 'https://example.com' },
-  { company: 'Previous Co.', role: 'Junior Developer', period: '2022 – 2024' },
+  {
+    company: 'Liberty Mutual',
+    role: 'Software Engineer Intern',
+    period: 'May 2026 – Jul 2026',
+    location: 'Boston, MA',
+    url: 'https://www.libertymutual.com',
+    bullets: [
+      'Built end-to-end AWS RDS snapshot infrastructure using KMS encryption, enabling database recovery/recreation',
+      'Shipped a Python microservice on AWS ECS with Datadog APM, reducing debugging time by 23%',
+      'Containerized application tests with Docker, resolving dependency conflicts that cut CI build failure rate by 72%',
+      'Improved DevOps workflows, restoring code-quality reporting across 39 repos by debugging GitHub Actions CI/CD',
+    ],
+  },
+  {
+    company: 'Boston College Physics Department',
+    role: 'Undergraduate Research Fellow',
+    period: 'Sep 2025 – Feb 2026',
+    location: 'Chestnut Hill, MA',
+    url: 'https://www.bc.edu/bc-web/schools/mcas/departments/physics.html',
+    bullets: [
+      'Automated 2D bilayer simulation pipelines with Python and Bash to generate training data for ML models',
+      'Trained a PyTorch CNN to identify structural patterns relating to superconductivity, achieving 73% accuracy',
+    ],
+  },
+  {
+    company: 'NYC Department of Design and Construction',
+    role: 'Software Engineer Intern',
+    period: 'Jun 2025 – Aug 2025',
+    location: 'Queens, NY',
+    url: 'https://www.nyc.gov/ddc',
+    bullets: [
+      'Engineered an Angular internal contract dashboard integrated with a REST API, reducing load time by 42%',
+      'Debugged API data with Postman and SQL stored procedures, ensuring 100% consistency across backend and UI',
+    ],
+  },
+  {
+    company: 'Flora Health',
+    role: 'Data & Analytics Intern',
+    period: 'May 2025 – Aug 2025',
+    location: 'Part-Time, Remote',
+    bullets: [
+      'Streamlined Alteryx workflows to clean multi-source healthcare campaign data, improving data consistency',
+      'Built an AI-powered NLP summarizer linking pharma news with campaign metrics, reducing reporting time 60%',
+    ],
+  },
 ];
+
+// ─── Leadership & Involvement ───────────────────────────────────────────────
+
+export const leadership: LeadershipRole[] = [
+  {
+    org: 'AWS Cloud Club',
+    role: 'Co-Founder; Core Team',
+    period: 'Jan 2026 – Present',
+    bullets: [
+      "Co-founded BC's AWS Cloud Club from scratch, growing to 40+ active members within the first semester",
+      'Organized hands-on workshops covering EC2, S3, Lambda, and IAM, giving students practical cloud experience',
+    ],
+  },
+  {
+    org: 'Computer Science Society',
+    role: 'Technology Team Lead',
+    period: 'Feb 2025 – Present',
+    bullets: [
+      'Led a cross-functional student open-source team, establishing code review standards for production deployments',
+      'Built bccss.dev + Hack the Heights (React/Next.js, Tailwind), improving performance & attracting 200+ students',
+    ],
+  },
+];
+
+// ─── Technical Skills ───────────────────────────────────────────────────────
+
+export const technicalSkills = {
+  Languages: ['Python', 'JavaScript', 'TypeScript', 'SQL', 'Java', 'C/C++', 'HTML/CSS'],
+  Frameworks: ['React', 'Next.js', 'Node.js', 'Django', 'React Native', 'Angular', 'Express.js', 'Tailwind'],
+  Tools: ['Git', 'AWS', 'Docker', 'Snowflake', 'Datadog', 'Postman', 'Expo'],
+  Certifications: ['AWS Certified Cloud Practitioner'],
+};
 
 // ─── Projects ─────────────────────────────────────────────────────────────────
 
@@ -52,54 +164,22 @@ export const projects: Project[] = [
       "I kept missing new listings on the job-board repos I was tracking because I'd forget to refresh the page. GH Job Alerts polls those repos every 10 minutes, diffs the markdown tables between commits, and fires an alert the moment a row is added — over Discord slash commands or, if you self-host with a Twilio account, straight to your phone as a text.",
     features: [
       {
-        iconName: 'bell',
         title: 'Discord + SMS Alerts',
         description: 'Add the official bot to your server for zero-setup alerts, or self-host with a GitHub token and optional Twilio account for SMS.',
       },
       {
-        iconName: 'refresh',
         title: '10-Minute Polling',
         description: 'Checks every tracked repo on a 10-minute cycle and diffs commits against the last-seen SHA — no missed pushes.',
       },
       {
-        iconName: 'chart',
         title: 'Web Dashboard',
         description: 'A dashboard for managing which repos, branches, and files you\'re tracking across multiple servers.',
       },
       {
-        iconName: 'file',
         title: 'Multi-Format Parsing',
         description: 'Handles several different markdown job-table formats used across popular job-board repos.',
       },
     ],
-    codeSnippet: {
-      lang: 'javascript',
-      filename: 'poller.js',
-      code: `async function pollRepo(repo) {
-  const { id, owner, name, branch, file_path, last_sha, label } = repo;
-  const repoSlug = \`\${owner}/\${name}\`;
-
-  const latestSha = await getLatestCommitSha(owner, name, branch, file_path);
-  if (!latestSha) return 0;
-
-  if (!last_sha) {
-    console.log(\`[\${repoSlug}] First run — recording baseline SHA \${latestSha.slice(0, 7)}\`);
-    if (!DRY_RUN) updateLastSha(id, latestSha);
-    return 0;
-  }
-
-  if (latestSha === last_sha) return 0;
-
-  const [beforeContent, afterContent] = await Promise.all([
-    getFileAtSha(owner, name, file_path, last_sha).catch(() => ""),
-    getFileAtSha(owner, name, file_path, latestSha),
-  ]);
-
-  const beforeHashes = new Set(extractJobsFromFile(beforeContent, repoSlug).map((j) => j.hash));
-  const afterJobs = extractJobsFromFile(afterContent, repoSlug);
-  const newJobs = afterJobs.filter((j) => !beforeHashes.has(j.hash));
-}`,
-    },
     links: [
       { label: 'View on GitHub', url: 'https://github.com/austinchan-orsini/gh-job-alerts', icon: 'github' },
     ],
@@ -109,70 +189,50 @@ export const projects: Project[] = [
     slug: 'streak',
     title: 'Streak',
     description:
-      'A 75 Hard tracking web app — daily task cards, a 75-day progress heatmap, and a satisfying tap-to-complete animation for every habit.',
-    date: '2026-06-01',
-    tags: ['TypeScript', 'React', 'Vite', 'Tailwind CSS'],
+      'A 75 Hard tracking web app — a daily checklist for the core rules plus your own custom tasks, a color-coded calendar, and a confetti burst every time you check something off.',
+    date: '2026-07-01',
+    tags: ['TypeScript', 'React', 'Firebase', 'Framer Motion'],
     featured: true,
     gradientVars: ['--butter', '--coral', '--mark', '--mint'],
+    image: { url: '/projects/streak/daily-progress.png', alt: 'Streak daily progress screen with core tasks and custom tasks side by side' },
+    screenshots: [
+      { url: '/projects/streak/landing.png', alt: 'Streak landing page: "build the habit, every single day"' },
+      { url: '/projects/streak/daily-progress.png', alt: 'Daily progress screen showing core tasks and custom tasks with a completion bar' },
+      { url: '/projects/streak/calendar.png', alt: 'Calendar view color-coded by day — purple for a perfect day, green for core tasks done' },
+      { url: '/projects/streak/edit.png', alt: 'Edit day modal for going back and updating a past day’s checklist' },
+    ],
+    screenshotAspect: '1917 / 867',
+    stackedMedia: true,
     longDescription:
-      "Streak is a web app for running the 75 Hard challenge — six core daily rules, and one reset back to day one if you miss any of them. I built it because the spreadsheet I was using to track my own run wasn't fun to look at. It's got custom task support on top of the core six, a 75-day heatmap calendar, and a little confetti burst every time a task (or a whole day) gets checked off.",
+      "Streak is a web app for running the 75 Hard challenge — two workouts, a gallon of water, 10 pages, sticking to your diet, and a progress photo, every day for 75 days straight. I built it because the spreadsheet I was using to track my own run wasn't fun to look at. On top of the six core rules you can add your own tasks with their own cadence, tag workouts by type, and go back and edit any past day from the calendar. It's backed by Firebase, so your run follows you across devices instead of living in one browser tab.",
+    realWorldValue:
+      "Habit trackers live or die on whether you actually open them the next day, and most people fall off 75 Hard — or any streak — not because the rules are hard, but because they lose track of where they stand. A calendar you can scan in two seconds, progress that follows you from your phone to your laptop, and a small hit of feedback when you check something off are the difference between a tracker you keep using and a spreadsheet you abandon by week two. It's also a full product rather than just a UI — real auth, sync, and persistence through Firebase — which is a different problem than laying out a checklist.",
     features: [
       {
-        iconName: 'flame',
-        title: '75-Day Streak Tracking',
-        description: 'Tracks the six core 75 Hard rules day by day, with a reset back to day one on any miss.',
+        title: 'Core tasks plus your own',
+        description: 'The six 75 Hard rules are built in, and you can add custom tasks on top — daily, weekdays only, or whatever cadence you set.',
       },
       {
-        iconName: 'trophy',
-        title: 'Daily Task Cards',
-        description: 'Check off the core rules or your own custom tasks, with a springy tap animation on completion.',
+        title: 'Tap to complete, with confetti',
+        description: 'Checking off a task fires a canvas-confetti burst, and clearing every task for the day triggers a bigger celebration.',
       },
       {
-        iconName: 'chart',
-        title: 'Calendar Heatmap',
-        description: 'A 75-day grid that fills in as you go, so you can see the whole run at a glance.',
+        title: 'Workout tagging',
+        description: 'Tag each workout with a type — run, gym, yoga, swim, hike, and a handful more — or add your own.',
       },
       {
-        iconName: 'chartline',
-        title: 'Synced Progress',
-        description: 'Sign in and your history syncs to the cloud, so your streak follows you across devices.',
+        title: 'Calendar heatmap',
+        description: 'A full month view color-coded by how the day went, so you can see your whole run — and any misses — at a glance.',
+      },
+      {
+        title: 'Edit past days',
+        description: 'Forgot to log something? Open any day from the calendar and update its checklist after the fact.',
+      },
+      {
+        title: 'Synced with Firebase',
+        description: 'Sign in and your progress follows you across devices instead of living in one browser tab.',
       },
     ],
-    codeSnippet: {
-      lang: 'typescript',
-      filename: 'useDailyTasks.ts',
-      code: `const toggleTask = (taskId: string, el: HTMLElement | null) => {
-  setState((current) => {
-    const currentTasks = [...initialTasks, ...current.customTasks];
-    const existing = current.history[dateKey] || {};
-    const progressForDay = ensureDayProgress(currentTasks, existing);
-    const task = currentTasks.find((item) => item.id === taskId);
-    if (!task) return current;
-
-    const currentState = progressForDay[taskId] || defaultTaskState(task);
-    const nextState = { ...currentState };
-    let becameDone = false;
-
-    if (task.kind === 'check') {
-      nextState.value = !Boolean(currentState.value);
-      becameDone = Boolean(nextState.value);
-    } else {
-      const numeric = Number(currentState.value || 0);
-      if (numeric >= (task.target ?? 0)) {
-        nextState.value = 0;
-      } else {
-        nextState.value = numeric + 1;
-        becameDone = nextState.value >= (task.target ?? 0);
-      }
-    }
-
-    progressForDay[taskId] = nextState;
-    if (becameDone) burstAt(el);
-
-    return { ...current, history: { ...current.history, [dateKey]: progressForDay } };
-  });
-};`,
-    },
     links: [
       { label: 'View on GitHub', url: 'https://github.com/austinchan-orsini/streak', icon: 'github' },
       { label: 'Live Demo', url: 'https://streak-pied.vercel.app', icon: 'external' },
@@ -181,69 +241,48 @@ export const projects: Project[] = [
 
   {
     slug: 'zetamac',
-    title: 'Zetamac Tracker',
+    title: 'Zetamac Stats Tracker',
     description:
-      'A Chrome extension that logs every question you solve in Zetamac, the mental-math game — operation type, time-to-solve, and carry/borrow detection.',
-    date: '2025-11-01',
-    tags: ['JavaScript', 'Chrome Extension', 'Manifest V3'],
+      'A Chrome extension with 200+ installs that injects a full analytics dashboard into Zetamac, the mental-math game — per-operation breakdowns, carry/borrow detection, and score history charts.',
+    date: '2026-01-01',
+    tags: ['JavaScript', 'Chrome Extension', 'Manifest V3', 'Chart.js'],
     featured: false,
     gradientVars: ['--coral', '--mark', '--mint', '--butter'],
+    image: { url: '/projects/zetamac/overview.png', alt: 'Zetamac Stats Tracker overview panel showing games played, average score, top scores, and a score history chart' },
+    screenshots: [
+      { url: '/projects/zetamac/overview.png', alt: 'Overview tab: lifetime games played, average score, last game, top 3 scores, and a score-history chart with running average' },
+      { url: '/projects/zetamac/subtraction.png', alt: 'Subtraction tab: average response time compared between problems that require borrowing and problems that don’t' },
+      { url: '/projects/zetamac/division.png', alt: 'Division tab: average response time for every divisor, color-coded green to red from fastest to slowest' },
+    ],
+    heroBadge: { label: 'Chrome Users', value: 200, suffix: '+' },
     longDescription:
-      "I wanted to know which arithmetic I was actually slow at instead of just watching my Zetamac score go up. This extension hooks into the game, classifies every question by operation and whether it involves a carry or borrow, times how long each one takes to answer, and stores the session history in Chrome's storage APIs. The logging and storage side is done; the analytics dashboard to actually make sense of the data is still a work in progress.",
+      "I wanted to know which arithmetic I was actually slow at instead of just watching my Zetamac score go up. This started as a content script that logs every question and answer, and grew into a full stats dashboard the extension injects right next to the game: an overview with lifetime and rolling-window views, separate tabs for each operation, and color-coded breakdowns down to the individual number (which divisors trip me up, which times tables are automatic, whether a subtraction problem needs borrowing). It's live on the Chrome Web Store with 200+ installs.",
+    realWorldValue:
+      "Most people practicing mental math just watch a single score go up or down — there's no way to tell if you're actually improving or just having a good day. Turning that into structured data, down to the specific operation and number, is what makes practice targeted instead of random: you can see you're consistently slow on ÷9 or borrow-heavy subtraction and drill exactly that instead of guessing. It's also a real example of shipping a browser extension end-to-end — reading and reacting to a third-party page's DOM, persisting state locally, and getting it in front of 200+ real users on the Chrome Web Store instead of leaving it as a script only I ever ran.",
     features: [
       {
-        iconName: 'chart',
-        title: 'Question Logging',
-        description: 'Captures every arithmetic question and result as you play, classified by operation type.',
+        title: 'Stats panel right in the page',
+        description: "Injects a panel next to the game itself — games played, average score, last game, top 3 scores — and you can flip between lifetime stats and just your last 10 or 50 games.",
       },
       {
-        iconName: 'keyboard',
-        title: 'Time-to-Solve Tracking',
-        description: 'Times how long each problem takes to answer and flags carry/borrow operations.',
+        title: 'Score history chart',
+        description: "A Chart.js bar chart of every game you've played with a running average line drawn through it, so you can actually tell if you're improving.",
       },
       {
-        iconName: 'cloudoff',
-        title: 'Local Session Storage',
-        description: "Session history persists across games using Chrome's storage APIs — no server needed.",
+        title: 'Broken down by operation',
+        description: 'Separate tabs for +, −, ×, ÷ show your average time on every specific number, color-coded green to red. Turns out I\'m just bad at dividing by 9.',
       },
       {
-        iconName: 'chartline',
-        title: 'Analytics (In Progress)',
-        description: 'Visualization of long-term performance trends is under active development.',
+        title: 'Carry and borrow detection',
+        description: 'Every addition and subtraction problem gets tagged by whether it needed a carry or borrow, with the average time for each side by side.',
+      },
+      {
+        title: 'Everything stays local',
+        description: 'No account, no backend — games are saved with chrome.storage.local and never leave your browser.',
       },
     ],
-    codeSnippet: {
-      lang: 'javascript',
-      filename: 'content.js',
-      code: `function saveGameHistory() {
-  const scoreText = findScoreElement()?.textContent?.trim() || "";
-  const match = scoreText.match(/\\d+/);
-  const score = match ? parseInt(match[0], 10) : 0;
-
-  if (score === 0) return;  // ignore empty games
-
-  const gameData = {
-    timestamp: Date.now(),
-    score,
-    solved: window.solvedQuestions.map(q => ({
-      a: q.a,
-      b: q.b,
-      operation: q.operation,
-      time: q.time,
-      carry: q.carry,
-      borrow: q.borrow,
-      table1: q.table1,
-      table2: q.table2
-    })),
-    duration: window.solvedQuestions.reduce((sum, q) => sum + q.time, 0),
-    avg: window.solvedQuestions.length
-      ? window.solvedQuestions.reduce((sum, q) => sum + q.time, 0) /
-        window.solvedQuestions.length
-      : null
-  };
-}`,
-    },
     links: [
+      { label: 'Add to Chrome', url: 'https://chromewebstore.google.com/detail/zetamac-stats-tracker/jeciaodfiphpofecfoldellkdlhlmffh', icon: 'chrome' },
       { label: 'View on GitHub', url: 'https://github.com/austinchan-orsini/zetamac', icon: 'github' },
     ],
   },
@@ -252,29 +291,53 @@ export const projects: Project[] = [
     slug: 'padly',
     title: 'Padly',
     description:
-      'A student housing platform for finding and posting off-campus sublets — built with my team, VibeCoders, for a software engineering class.',
+      'A Google-authenticated housing marketplace for Boston College students — map-based listings, real-time chat, and roommate matching, built with a 9-person team for a software engineering course.',
     date: '2026-04-01',
-    tags: ['Full-Stack', 'Team Project', 'SWE Course'],
+    tags: ['Django', 'Python', 'Django Channels', 'Team Project'],
     featured: false,
     gradientVars: ['--mark', '--mint', '--butter', '--coral'],
+    image: { url: '/projects/padly/listings.jpg', alt: 'Padly listings page with a map of nearby sublets and a filterable list view' },
+    screenshots: [
+      { url: '/projects/padly/home.jpg', alt: 'Padly landing page — "Find a place near campus," rentals and subleases near Boston College' },
+      { url: '/projects/padly/listings.jpg', alt: 'Listings page with a MapLibre map of nearby sublets alongside a filterable list view' },
+      { url: '/projects/padly/roommates.png', alt: 'Roommate matching page with group posts, match percentage, and a message-lead button' },
+      { url: '/projects/padly/messages.png', alt: 'Real-time messaging inbox between roommate matches' },
+      { url: '/projects/padly/dashboard.png', alt: 'Account dashboard with listings, conversations, saved people, and a document library' },
+    ],
+    screenshotAspect: '8 / 5',
+    stackedMedia: true,
     longDescription:
-      "Padly was a semester-long team project for my software engineering class, built with my team VibeCoders. It's a platform for students to find and post off-campus sublets — browse listings near campus, post your own place, and connect with the other side of the sublet without digging through a dozen scattered group chats. [more detail on the exact stack + my specific contributions to come]",
+      "Padly was a semester-long team project for my software engineering course (CSCI3356) — a housing and subletting marketplace for Boston College students, built by a 9-person team over 269 commits. It's Google-OAuth-only with no password fallback, with role-based access for students, realtors, moderators, support, and admins; real-time chat over WebSockets via Django Channels; verified-address listings geocoded through the Geoapify API and browsable on a map; and a full moderation and reporting pipeline behind it, backed by roughly 440 automated tests. My own commits were a small slice of that — mostly the listing-creation form fields and fixes to the dashboard and profile toggle — while the team collectively built out auth, messaging, moderation, and the test suite.",
+    realWorldValue:
+      "Off-campus subletting at BC mostly happens through sprawling Facebook groups and group chats with no verification — no way to know if a listing address is real, who you're actually messaging, or whether a \"landlord\" is who they say they are. Padly ties every account to a Google-verified BC identity, geocodes listings against a real address before they go live, and gives moderators an actual reporting and investigation workflow instead of hoping people self-police a group chat. Trust and verification at that scale is the kind of infrastructure problem a class project doesn't usually get to touch, which is what made it worth a team's whole semester.",
     features: [
       {
-        iconName: 'search',
-        title: 'Sublet Listings',
-        description: 'Browse and filter short-term sublets near campus.',
+        title: 'Google-OAuth-only accounts',
+        description: 'No password fallback, with role-based access for students, realtors, moderators, support, and admins.',
       },
       {
-        iconName: 'file',
-        title: 'Post a Listing',
-        description: 'Post your own place with photos, pricing, and lease-length details.',
+        title: 'Real-time chat',
+        description: 'Built on Django Channels and Daphne with a custom WebSocket consumer that only lets listing participants message each other.',
       },
       {
-        iconName: 'trophy',
-        title: 'Team Project',
-        description: 'Built end-to-end with my SWE class team, VibeCoders, over a semester.',
+        title: 'Verified-address listings',
+        description: 'Addresses are geocoded through the Geoapify API and browsable on a MapLibre map, with a list-view fallback.',
       },
+      {
+        title: 'Roommate matching',
+        description: 'Post or browse roommate group listings with a match score, and message a lead directly from the post.',
+      },
+      {
+        title: 'Moderation and reporting',
+        description: 'Reviews, reports, and an admin investigation workspace with full audit logging behind every action.',
+      },
+      {
+        title: 'Tested and CI-gated',
+        description: 'About 440 backend tests plus a Playwright end-to-end suite, run in GitHub Actions alongside linting and migration-drift checks.',
+      },
+    ],
+    links: [
+      { label: 'View on GitHub', url: 'https://github.com/CSCI3356-Spring2026/Vibecoders', icon: 'github' },
     ],
   },
 
@@ -291,12 +354,10 @@ export const projects: Project[] = [
       "Nibl is a personal side project — a cooking app for recipe discovery and meal planning. It's still early and living in a private repo while I figure out the shape of it, so consider this card a placeholder until it's further along.",
     features: [
       {
-        iconName: 'file',
         title: 'Recipe Discovery',
         description: 'Find and save recipes worth cooking again.',
       },
       {
-        iconName: 'chart',
         title: 'Meal Planning',
         description: 'Plan out meals for the week ahead.',
       },
@@ -316,12 +377,10 @@ export const projects: Project[] = [
       "This is a placeholder for a facial recognition project I'm still working through — real-time face detection, landmarks, and matching against a small known-faces database. Details and a real write-up go here once it's further along.",
     features: [
       {
-        iconName: 'search',
         title: 'Face Detection',
         description: 'Real-time detection from a webcam feed.',
       },
       {
-        iconName: 'chart',
         title: 'Recognition',
         description: 'Matching detected faces against a small known-faces database.',
       },

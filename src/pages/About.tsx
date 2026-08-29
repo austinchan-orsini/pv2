@@ -66,21 +66,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
-      {/* ── Skills / Tools ───────────────────────────────────────────────── */}
-      <section className="space-y-4">
-        <h2 className="text-ink text-xl font-semibold">Skills & Tools</h2>
-        <div className="flex flex-wrap gap-2">
-          {[
-            'TypeScript', 'React', 'Python', 'Go', 'Node.js',
-            'PostgreSQL', 'Docker', 'Git', 'Linux',
-          ].map((skill) => (
-            <span key={skill} className="bg-bar-track text-ink-muted rounded-md px-3 py-1 text-sm">
-              {skill}
-            </span>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }

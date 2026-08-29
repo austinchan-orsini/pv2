@@ -3,6 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { mainNavItems } from '../../lib/config';
 import Breadcrumb from './Breadcrumb';
 
+const NAV_SWEEP = ['sweep-mint', 'sweep-butter', 'sweep-coral', 'sweep-mark'];
+
 type Props = { onToggleSidebar: () => void };
 
 export default function Header({ onToggleSidebar }: Props) {
@@ -30,11 +32,11 @@ export default function Header({ onToggleSidebar }: Props) {
 
       {/* Desktop nav */}
       <nav className="hidden md:flex items-center space-x-1">
-        {mainNavItems.map((item) => (
+        {mainNavItems.map((item, i) => (
           <Link
             key={item.href}
             to={item.href}
-            className={`sweep sweep-butter text-ink rounded px-3 py-2 text-sm font-medium ${
+            className={`sweep ${NAV_SWEEP[i % NAV_SWEEP.length]} text-ink rounded px-3 py-2 text-sm font-medium ${
               pathname === item.href ? 'sweep-active' : ''
             }`}
           >

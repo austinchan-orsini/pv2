@@ -22,7 +22,7 @@ const init = () => {
 
 const OPPOSITES: Record<Dir, Dir> = { U: 'D', D: 'U', L: 'R', R: 'L' };
 
-export default function TimeWaster() {
+export default function Snake() {
   const [state, setState] = useState(init);
   // Queue of upcoming directions — validated against the tail of the queue,
   // consumed one per tick. Prevents "two keys between ticks = instant death".
@@ -94,7 +94,7 @@ export default function TimeWaster() {
       <div className="mb-3 flex items-center justify-between shrink-0">
         <h3 className="text-ink flex items-center gap-2 text-sm font-semibold">
           <IconDeviceGamepad2 size={16} className="text-mark" />
-          Time Waster
+          Snake
         </h3>
         <span className="text-ink text-xs">
           {state.score} pt{state.score !== 1 ? 's' : ''}

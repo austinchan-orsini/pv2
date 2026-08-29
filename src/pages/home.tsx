@@ -10,14 +10,13 @@ import { featuredProjects } from '../lib/data';
 import LinkWithIcon from '../components/LinkWithIcon';
 import Experience from '../components/Experience';
 import Featured from '../components/Featured';
-import TimeWaster from '../components/bento/TimeWaster';
+import Snake from '../components/bento/Snake';
 import ClickerBox from "../components/bento/ClickerBox";
 import SpotifyBox from '../components/bento/SpotifyBox';
 import FunFactsBox from '../components/bento/FunFactsBox';
 import PixelCanvas from '../components/bento/PixelCanvas';
 
 export default function Home() {
-  const [nameHovered, setNameHovered] = useState(false);
   const [commits, setCommits] = useState<Commit[] | null>(null);
 
   useEffect(() => {
@@ -32,24 +31,7 @@ export default function Home() {
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="space-y-5 px-4 md:px-0">
         <h1 className="text-3xl font-semibold md:text-4xl text-ink">
-          Hey! I'm{' '}
-          <span className="text-ink">
-            <span
-              className="relative inline-block"
-              onMouseEnter={() => setNameHovered(true)}
-              onMouseLeave={() => setNameHovered(false)}
-            >
-              Austin
-              <span
-                className={`pointer-events-none inline-flex overflow-hidden whitespace-nowrap align-baseline transition-all duration-500 ease-out select-none ${
-                  nameHovered ? 'max-w-[10ch] opacity-100' : 'max-w-0 opacity-0'
-                }`}
-              >
-                &nbsp;'A.C.'
-              </span>
-            </span>{' '}
-            Chan-Orsini
-          </span>
+          Hey! I'm Austin Chan-Orsini
         </h1>
 
         <p className="text-ink-secondary max-w-prose text-base leading-relaxed">
@@ -96,8 +78,8 @@ export default function Home() {
           {/* Box 2: Spotify */}
           <SpotifyBox />
 
-          {/* Box 3: Time Waster (Snake) */}
-          <TimeWaster />
+          {/* Box 3: Snake */}
+          <Snake />
 
           {/* Box 4: Pixel Canvas */}
           <PixelCanvas />

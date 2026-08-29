@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { IconArrowRight, IconStar } from '@tabler/icons-react';
 import type { Project } from '../lib/data';
+import ProjectThumb from './ProjectThumb';
+import { tagColor } from '../lib/tagColor';
 
 type Props = { projects: Project[]; maxProjects?: number };
 
@@ -31,17 +33,9 @@ export default function Featured({ projects, maxProjects = 2 }: Props) {
             to={`/projects/${project.slug}`}
             className="border-hairline bg-paper hover:border-ink group block overflow-hidden rounded-xl border transition-colors duration-300 focus:outline-none"
           >
-            {project.image ? (
-              <div className="overflow-hidden">
-                <img
-                  src={project.image.url}
-                  alt={project.image.alt}
-                  className="aspect-video w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-            ) : (
-              <div className="bg-bar-track aspect-video w-full" />
-            )}
+            <div className="overflow-hidden">
+              <ProjectThumb project={project} className="transition-transform duration-300 group-hover:scale-105" />
+            </div>
             <div className="space-y-2 p-5">
               <h3 className="text-ink group-hover:text-mark text-xl font-semibold transition-colors">
                 {project.title}
@@ -50,7 +44,15 @@ export default function Featured({ projects, maxProjects = 2 }: Props) {
               {project.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   {project.tags.map((tag) => (
-                    <span key={tag} className="bg-bar-track text-ink-muted rounded px-2 py-0.5 text-xs">
+                    <span
+                      key={tag}
+                      className="rounded px-2 py-0.5 text-xs"
+                      style={{
+                        color: 'var(--ink-secondary)',
+                        backgroundColor: `${tagColor(tag)}40`,
+                        border: `1px solid ${tagColor(tag)}80`,
+                      }}
+                    >
                       {tag}
                     </span>
                   ))}

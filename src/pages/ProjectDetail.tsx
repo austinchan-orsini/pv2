@@ -3,24 +3,14 @@ import { useParams, Link, Navigate } from 'react-router-dom';
 import {
   IconArrowLeft,
   IconBrandGithub,
+  IconBrandChrome,
   IconExternalLink,
-  IconCopy,
-  IconCheck,
-  IconChartBar,
-  IconRefresh,
-  IconTrophy,
-  IconDownload,
-  IconSearch,
-  IconFileText,
-  IconKeyboard,
-  IconCloudOff,
-  IconFlame,
-  IconBell,
-  IconChartLine,
-  IconMail,
+  IconChevronLeft,
+  IconChevronRight,
 } from '@tabler/icons-react';
-import type { ComponentType } from 'react';
 import { projects } from '../lib/data';
+import { tagColor } from '../lib/tagColor';
+import { formatMonthYear } from '../lib/date';
 
 // ─── Inline hooks ─────────────────────────────────────────────────────────────
 
@@ -28,7 +18,6 @@ function useCountUp(target: number, active: boolean, duration = 1300): number {
   const [value, setValue] = useState(0);
   useEffect(() => {
     if (!active) return;
-    setValue(0);
     const start = performance.now();
     const tick = (now: number) => {
       const t = Math.min((now - start) / duration, 1);
@@ -57,88 +46,71 @@ function useInView(threshold = 0.15) {
   return [ref, inView] as const;
 }
 
-// ─── Icon map ─────────────────────────────────────────────────────────────────
-
-const ICON_MAP: Record<string, ComponentType<{ size?: number; className?: string }>> = {
-  chart:     IconChartBar,
-  refresh:   IconRefresh,
-  trophy:    IconTrophy,
-  download:  IconDownload,
-  search:    IconSearch,
-  file:      IconFileText,
-  keyboard:  IconKeyboard,
-  cloudoff:  IconCloudOff,
-  flame:     IconFlame,
-  bell:      IconBell,
-  chartline: IconChartLine,
-  mail:      IconMail,
-};
-
-// ─── Tag colors ───────────────────────────────────────────────────────────────
-
-const TAG_PALETTE = ['#a9d6c1', '#f0d79b', '#e9a3a9', '#c97f86'];
-function tagColor(tag: string) {
-  let hash = 0;
-  for (let i = 0; i < tag.length; i++) hash = (hash * 31 + tag.charCodeAt(i)) | 0;
-  return TAG_PALETTE[Math.abs(hash) % TAG_PALETTE.length];
-}
-
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function StatCounter({
-  stat,
-  active,
+function ScreenshotGallery({
+  shots,
+  aspect = '3 / 4',
+  fullWidth = false,
 }: {
-  stat: { label: string; value: number; suffix?: string };
-  active: boolean;
+  shots: { url: string; alt: string }[];
+  aspect?: string;
+  fullWidth?: boolean;
 }) {
-  const n = useCountUp(stat.value, active);
-  return (
-    <div className="bg-bar-track flex flex-col items-center rounded-xl px-4 py-5 gap-1">
-      <span className="text-ink text-3xl font-semibold tabular-nums">
-        {n.toLocaleString()}
-        {stat.suffix ?? ''}
-      </span>
-      <span className="text-ink-muted text-xs uppercase tracking-widest">{stat.label}</span>
-    </div>
-  );
-}
+  const [index, setIndex] = useState(0);
+  const thumbRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-function CodeBlock({ code, filename }: { code: string; filename: string }) {
-  const [copied, setCopied] = useState(false);
-  const copy = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-  const lines = code.split('\n');
+  useEffect(() => {
+    thumbRefs.current[index]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }, [index]);
+
+  const prev = () => setIndex((i) => (i - 1 + shots.length) % shots.length);
+  const next = () => setIndex((i) => (i + 1) % shots.length);
+
   return (
-    <div className="border-hairline overflow-hidden rounded-xl border">
-      {/* Titlebar */}
-      <div className="bg-ink flex items-center justify-between px-4 py-2.5 border-b border-paper/10">
-        <div className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full bg-coral opacity-70" />
-          <span className="h-3 w-3 rounded-full bg-butter opacity-70" />
-          <span className="h-3 w-3 rounded-full bg-mint opacity-70" />
-          <span className="text-paper/70 ml-3 text-xs">{filename}</span>
+    <div className={`mx-auto flex w-full flex-col gap-2 ${fullWidth ? '' : 'max-w-md'}`}>
+      <div
+        className="border-hairline bg-ink/5 group relative overflow-hidden rounded-xl border"
+        style={{ aspectRatio: aspect }}
+      >
+        <img src={shots[index].url} alt={shots[index].alt} className="h-full w-full object-cover object-top" />
+        {shots.length > 1 && (
+          <>
+            <button
+              onClick={prev}
+              aria-label="Previous screenshot"
+              className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-1.5 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-black/60"
+            >
+              <IconChevronLeft size={16} />
+            </button>
+            <button
+              onClick={next}
+              aria-label="Next screenshot"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-1.5 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-black/60"
+            >
+              <IconChevronRight size={16} />
+            </button>
+          </>
+        )}
+      </div>
+      {shots.length > 1 && (
+        <div className="flex gap-1.5 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
+          {shots.map((shot, i) => (
+            <button
+              key={shot.url}
+              ref={(el) => { thumbRefs.current[i] = el; }}
+              onClick={() => setIndex(i)}
+              aria-label={`Show screenshot ${i + 1} of ${shots.length}`}
+              className={`h-11 shrink-0 overflow-hidden rounded-md border-2 transition-[width,opacity] duration-300 ${
+                i === index ? 'border-mark' : 'border-transparent opacity-60 hover:opacity-100'
+              }`}
+              style={{ width: i === index ? 64 : 40 }}
+            >
+              <img src={shot.url} alt="" className="h-full w-full object-cover" />
+            </button>
+          ))}
         </div>
-        <button
-          onClick={copy}
-          className="text-paper/70 hover:text-paper flex items-center gap-1.5 rounded px-2 py-1 text-xs transition-colors hover:bg-paper/10"
-        >
-          {copied ? <IconCheck size={12} /> : <IconCopy size={12} />}
-          {copied ? 'Copied!' : 'Copy'}
-        </button>
-      </div>
-      {/* Code */}
-      <div className="bg-ink overflow-x-auto p-4 text-sm leading-relaxed">
-        {lines.map((line, i) => (
-          <div key={i} className="flex gap-4 min-w-0">
-            <span className="text-paper/40 w-5 shrink-0 select-none text-right tabular-nums">{i + 1}</span>
-            <span className="text-paper/90 whitespace-pre">{line}</span>
-          </div>
-        ))}
-      </div>
+      )}
     </div>
   );
 }
@@ -170,6 +142,22 @@ function ShineLink({ href, label, icon }: { href: string; label: string; icon?: 
   );
 }
 
+function IconLink({ href, label, icon }: { href: string; label: string; icon?: string }) {
+  const Icon = icon === 'github' ? IconBrandGithub : icon === 'chrome' ? IconBrandChrome : IconExternalLink;
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      title={label}
+      className="text-ink-muted hover:text-ink transition-colors"
+    >
+      <Icon size={18} />
+    </a>
+  );
+}
+
 // ─── Hero banner ──────────────────────────────────────────────────────────────
 
 function HeroBanner({
@@ -177,11 +165,13 @@ function HeroBanner({
   title,
   description,
   tags,
+  badge,
 }: {
   gradientVars: [string, string, string, string];
   title: string;
   description: string;
   tags: string[];
+  badge?: { label: string; value: number; suffix?: string };
 }) {
   const orbs = [
     { x: '8%',  y: '20%', s: 220, v: gradientVars[0], d: 6,  dl: 0   },
@@ -190,6 +180,8 @@ function HeroBanner({
     { x: '22%', y: '68%', s: 130, v: gradientVars[3], d: 9,  dl: 0.5 },
     { x: '48%', y: '38%', s: 100, v: gradientVars[0], d: 5.5,dl: 1.5 },
   ];
+
+  const badgeCount = useCountUp(badge?.value ?? 0, Boolean(badge));
 
   return (
     <div
@@ -237,6 +229,92 @@ function HeroBanner({
           ))}
         </div>
       </div>
+
+      {/* Corner badge */}
+      {badge && (
+        <div className="absolute bottom-6 right-6 flex flex-col items-end">
+          <span className="text-2xl font-semibold tabular-nums text-white drop-shadow md:text-3xl">
+            {badgeCount}
+            {badge.suffix ?? ''}
+          </span>
+          <span className="text-[11px] uppercase tracking-widest text-white/70">{badge.label}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Bare hero (used when a project has real screenshots) ─────────────────────
+
+function BareHero({
+  title,
+  description,
+  tags,
+  badge,
+  date,
+  links,
+  longDescription,
+}: {
+  title: string;
+  description: string;
+  tags: string[];
+  badge?: { label: string; value: number; suffix?: string };
+  date?: string;
+  links?: { label: string; url: string; icon?: string }[];
+  longDescription?: string;
+}) {
+  const badgeCount = useCountUp(badge?.value ?? 0, Boolean(badge));
+
+  return (
+    <div>
+      <h1 className="text-ink text-3xl font-semibold md:text-4xl">{title}</h1>
+      {(date || (links && links.length > 0)) && (
+        <div className="mt-1.5 flex items-center gap-3">
+          {date && (
+            <span className="text-ink-muted text-sm">
+              {formatMonthYear(date)}
+            </span>
+          )}
+          {links && links.length > 0 && (
+            <div className="flex items-center gap-2.5">
+              {links.map((link) => (
+                <IconLink key={link.label} href={link.url} label={link.label} icon={link.icon} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+      <p className="text-ink-secondary mt-3 leading-relaxed">{description}</p>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {tags.map((t) => (
+          <span
+            key={t}
+            className="rounded px-2 py-0.5 text-xs"
+            style={{
+              color: 'var(--ink-secondary)',
+              backgroundColor: `${tagColor(t)}40`,
+              border: `1px solid ${tagColor(t)}80`,
+            }}
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+      {badge && (
+        <div className="mt-6 flex items-baseline gap-2">
+          <span className="text-ink text-3xl font-semibold tabular-nums">
+            {badgeCount}
+            {badge.suffix ?? ''}
+          </span>
+          <span className="text-ink-muted text-xs uppercase tracking-widest">{badge.label}</span>
+        </div>
+      )}
+      {longDescription && (
+        <div className="border-hairline bg-paper mt-6 rounded-xl border p-6">
+          <h2 className="text-ink mb-3 text-lg font-semibold">About</h2>
+          <p className="text-ink-secondary leading-relaxed">{longDescription}</p>
+        </div>
+      )}
     </div>
   );
 }
@@ -248,13 +326,12 @@ export default function ProjectDetail() {
   const project = projects.find((p) => p.slug === slug);
   const related = projects.filter((p) => p.slug !== slug).slice(0, 2);
 
-  const [statsRef, statsInView] = useInView(0.2);
   const [featuresRef, featuresInView] = useInView(0.1);
-  const [codeRef, codeInView] = useInView(0.15);
 
   if (!project) return <Navigate to="/projects" replace />;
 
   const gradVars = project.gradientVars ?? ['--mint', '--butter', '--coral', '--mark'];
+  const hasMedia = Boolean(project.screenshots && project.screenshots.length > 0);
 
   return (
     <div className="mx-auto max-w-4xl space-y-10 px-4 py-8 md:px-0">
@@ -267,80 +344,100 @@ export default function ProjectDetail() {
         <span className="sweep sweep-mint">Back to Projects</span>
       </Link>
 
-      {/* Hero */}
-      <HeroBanner
-        gradientVars={gradVars}
-        title={project.title}
-        description={project.description}
-        tags={project.tags}
-      />
+      {hasMedia ? (
+        project.stackedMedia ? (
+          /* Hero — gallery full-width above the title, single column */
+          <div className="space-y-6">
+            <ScreenshotGallery shots={project.screenshots!} aspect={project.screenshotAspect} fullWidth />
+            <BareHero
+              title={project.title}
+              description={project.description}
+              tags={project.tags}
+              badge={project.heroBadge}
+              date={project.date}
+              links={project.links}
+              longDescription={project.longDescription}
+            />
+          </div>
+        ) : (
+          /* Hero — title/description/About in one column, gallery beside it */
+          <div className="grid gap-8 md:grid-cols-2">
+            <BareHero
+              title={project.title}
+              description={project.description}
+              tags={project.tags}
+              badge={project.heroBadge}
+              date={project.date}
+              links={project.links}
+              longDescription={project.longDescription}
+            />
+            <ScreenshotGallery shots={project.screenshots!} aspect={project.screenshotAspect} />
+          </div>
+        )
+      ) : (
+        <>
+          {/* Hero */}
+          <HeroBanner
+            gradientVars={gradVars}
+            title={project.title}
+            description={project.description}
+            tags={project.tags}
+            badge={project.heroBadge}
+          />
 
-      {/* Meta row */}
-      <div className="flex flex-wrap items-center gap-3 text-sm">
-        <span className="text-ink-muted">
-          {new Date(project.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
-        </span>
-      </div>
+          {/* Meta row */}
+          <div className="flex flex-wrap items-center gap-3 text-sm">
+            <span className="text-ink-muted">
+              {formatMonthYear(project.date)}
+            </span>
+          </div>
 
-      {/* Stats */}
-      {project.stats && (
-        <div ref={statsRef} className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {project.stats.map((stat) => (
-            <StatCounter key={stat.label} stat={stat} active={statsInView} />
-          ))}
-        </div>
-      )}
-
-      {/* Long description */}
-      {project.longDescription && (
-        <div className="border-hairline bg-paper rounded-xl border p-6">
-          <h2 className="text-ink mb-3 text-lg font-semibold">About</h2>
-          <p className="text-ink-secondary leading-relaxed">{project.longDescription}</p>
-        </div>
+          {/* Long description */}
+          {project.longDescription && (
+            <div className="border-hairline bg-paper rounded-xl border p-6">
+              <h2 className="text-ink mb-3 text-lg font-semibold">About</h2>
+              <p className="text-ink-secondary leading-relaxed">{project.longDescription}</p>
+            </div>
+          )}
+        </>
       )}
 
       {/* Features */}
       {project.features && (
-        <div ref={featuresRef}>
-          <h2 className="text-ink mb-5 text-lg font-semibold">Features</h2>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {project.features.map((feature, i) => {
-              const Icon = ICON_MAP[feature.iconName] ?? IconFileText;
-              return (
-                <div
-                  key={feature.title}
-                  className="border-hairline bg-paper rounded-xl border p-5"
-                  style={{
-                    opacity: featuresInView ? 1 : 0,
-                    transform: featuresInView ? 'translateY(0)' : 'translateY(18px)',
-                    transition: `opacity 0.45s ease ${i * 0.08}s, transform 0.45s ease ${i * 0.08}s`,
-                  }}
-                >
-                  <div className="text-mark mb-3">
-                    <Icon size={20} />
-                  </div>
-                  <h3 className="text-ink mb-1 text-sm font-semibold">{feature.title}</h3>
-                  <p className="text-ink-secondary text-xs leading-relaxed">{feature.description}</p>
-                </div>
-              );
-            })}
-          </div>
+        <div
+          ref={featuresRef}
+          style={{
+            opacity: featuresInView ? 1 : 0,
+            transform: featuresInView ? 'translateY(0)' : 'translateY(12px)',
+            transition: 'opacity 0.5s ease, transform 0.5s ease',
+          }}
+        >
+          <h2 className="text-ink mb-4 text-lg font-semibold">Features</h2>
+          <ul className="space-y-2.5">
+            {project.features.map((feature) => (
+              <li key={feature.title} className="text-ink-secondary flex gap-2.5 text-sm leading-relaxed">
+                <span className="text-mark mt-1.5 h-1 w-1 shrink-0 rounded-full bg-current" />
+                <span>
+                  <span className="text-ink font-semibold">{feature.title}</span>
+                  {' — '}
+                  {feature.description}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
-      {/* Code snippet */}
-      {project.codeSnippet && (
-        <div
-          ref={codeRef}
-          style={{ opacity: codeInView ? 1 : 0, transition: 'opacity 0.55s ease 0.1s' }}
-        >
-          <h2 className="text-ink mb-4 text-lg font-semibold">Code Snippet</h2>
-          <CodeBlock code={project.codeSnippet.code} filename={project.codeSnippet.filename} />
+      {/* Real-world application */}
+      {project.realWorldValue && (
+        <div className="border-hairline bg-paper rounded-xl border p-6">
+          <h2 className="text-ink mb-3 text-lg font-semibold">Real-World Application</h2>
+          <p className="text-ink-secondary leading-relaxed">{project.realWorldValue}</p>
         </div>
       )}
 
       {/* Links */}
-      {project.links && project.links.length > 0 && (
+      {!hasMedia && project.links && project.links.length > 0 && (
         <div className="flex flex-wrap gap-3 pt-2">
           {project.links.map((link) => (
             <ShineLink key={link.label} href={link.url} label={link.label} icon={link.icon} />

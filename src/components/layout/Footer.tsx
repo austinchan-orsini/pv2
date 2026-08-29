@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { IconClock } from '@tabler/icons-react';
+import { IconClock, IconEye, IconBrandGithub, IconBrandLinkedin } from '@tabler/icons-react';
 import { Site } from '../../lib/config';
 import { hitCounter } from '../../lib/abacus';
 
@@ -56,14 +56,37 @@ export default function Footer() {
           </div>
         </div>
 
-        <span className="flex items-center gap-1.5 md:justify-self-center" title="Time on site">
-          <IconClock size={14} className="text-ink-muted" />
-          <span className="text-ink text-xs">{timeOnSite}</span>
-        </span>
+        <div className="flex items-center gap-4 md:justify-self-center">
+          <a
+            href={Site.out.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            className="text-ink-muted hover:text-ink transition-colors"
+          >
+            <IconBrandGithub size={16} />
+          </a>
+          <a
+            href={Site.out.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+            className="text-ink-muted hover:text-ink transition-colors"
+          >
+            <IconBrandLinkedin size={16} />
+          </a>
+        </div>
 
-        <span className="text-ink-muted text-xs md:justify-self-end">
-          {views === null ? '...' : views.toLocaleString()} views
-        </span>
+        <div className="flex items-center gap-3 md:justify-self-end">
+          <span className="flex items-center gap-1.5" title="Site views">
+            <IconEye size={14} className="text-ink-muted" />
+            <span className="text-ink text-xs">{views === null ? '...' : views.toLocaleString()} views</span>
+          </span>
+          <span className="flex items-center gap-1.5" title="Time on site">
+            <IconClock size={14} className="text-ink-muted" />
+            <span className="text-ink text-xs">{timeOnSite}</span>
+          </span>
+        </div>
       </footer>
     </div>
   );
