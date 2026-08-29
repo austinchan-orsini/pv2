@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { IconClock, IconBrandGithub, IconBrandLinkedin } from '@tabler/icons-react';
+import { IconClock } from '@tabler/icons-react';
 import { Site } from '../../lib/config';
 import { hitCounter } from '../../lib/abacus';
 
@@ -43,45 +43,27 @@ export default function Footer() {
 
   return (
     <div className="mx-5 mb-5">
-      <footer className="bg-crust text-subtext0 border-surface0/20 flex flex-col items-center justify-between gap-3 rounded-lg border p-5 text-sm md:flex-row md:gap-0">
-        <div className="flex items-center gap-3">
+      <footer className="bg-paper text-ink-secondary border-hairline flex flex-col items-center justify-between gap-3 rounded-lg border p-5 text-sm md:grid md:grid-cols-3 md:gap-0">
+        <div className="flex items-center gap-3 md:justify-self-start">
           <span>© {year} {Site.seo.author}</span>
-          <span className="text-surface1 hidden md:inline">—</span>
+          <span className="text-hairline hidden md:inline">—</span>
           <div className="flex items-center gap-1.5">
             <span className="relative flex h-3 w-3">
-              <span className="bg-green/75 absolute inline-flex h-full w-full animate-ping rounded-full" />
-              <span className="bg-green relative inline-flex h-3 w-3 rounded-full" />
+              <span className="bg-mark/75 absolute inline-flex h-full w-full animate-ping rounded-full" />
+              <span className="bg-mark relative inline-flex h-3 w-3 rounded-full" />
             </span>
-            <span className="text-subtext1 text-xs">All Systems Nominal</span>
+            <span className="text-ink-muted text-xs">All Systems Nominal</span>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-  <span className="flex items-center gap-1.5" title="Time on site">
-    <IconClock size={14} className="text-subtext1" />
-    <span className="text-accent font-mono text-xs">{timeOnSite}</span>
-  </span>
+        <span className="flex items-center gap-1.5 md:justify-self-center" title="Time on site">
+          <IconClock size={14} className="text-ink-muted" />
+          <span className="text-ink text-xs">{timeOnSite}</span>
+        </span>
 
-  <span className="text-surface0">—</span>
-
-  <span className="text-subtext1 text-xs font-mono">
-    {views === null ? '...' : views.toLocaleString()} views
-  </span>
-
-  <span className="text-surface0">—</span>
-
-  <span className="text-subtext1 text-xs font-mono">⎇ 448b603</span>
-
-  <span className="text-surface0">—</span>
-
-  <a href={Site.out.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-subtext1 hover:text-accent transition-colors">
-    <IconBrandGithub size={16} stroke={1.5} />
-  </a>
-
-  <a href={Site.out.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-subtext1 hover:text-accent transition-colors">
-    <IconBrandLinkedin size={16} stroke={1.5} />
-  </a>
-</div>
+        <span className="text-ink-muted text-xs md:justify-self-end">
+          {views === null ? '...' : views.toLocaleString()} views
+        </span>
       </footer>
     </div>
   );

@@ -6,27 +6,27 @@ export default function Breadcrumb() {
 
   return (
     <nav aria-label="Breadcrumbs">
-      <ul className="flex items-center text-sm font-mono select-none">
+      <ul className="flex items-center text-sm select-none">
         <li>
-          <Link to="/" className="text-accent hover:opacity-70 transition-opacity">~</Link>
+          <Link to="/" className="sweep sweep-mint text-ink">~</Link>
         </li>
         {segments.map((seg, i) => {
           const href = '/' + segments.slice(0, i + 1).join('/');
           const isLast = i === segments.length - 1;
           return (
             <li key={href} className="flex items-center">
-              <span className="mx-1 text-overlay0">/</span>
+              <span className="mx-1 text-mark">/</span>
               {isLast ? (
-                <span className="text-text" aria-current="page">{seg}</span>
+                <span className="text-ink" aria-current="page">{seg}</span>
               ) : (
-                <Link to={href} className="text-subtext1 hover:text-accent transition-colors">{seg}</Link>
+                <Link to={href} className="sweep sweep-mint text-ink-muted">{seg}</Link>
               )}
             </li>
           );
         })}
         <li className="flex items-center">
-          <span className="mx-1 text-overlay0" aria-hidden="true">/</span>
-          <span className="bg-accent h-4 w-2 cursor-blink" aria-hidden="true" />
+          <span className="mx-1 text-mark" aria-hidden="true">/</span>
+          <span className="bg-mark h-4 w-2 cursor-blink" aria-hidden="true" />
         </li>
       </ul>
     </nav>

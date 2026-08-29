@@ -49,19 +49,19 @@ export default function ClickerBox() {
   };
 
   return (
-    <div className="border-surface0 bg-canvas rounded-xl border p-6 shadow-lg flex flex-col items-center justify-center h-full">
-      <div className="mb-5 text-4xl font-bold tracking-widest text-accent">
+    <div className="border-hairline bg-paper rounded-xl border p-6 flex flex-col items-center justify-center aspect-square">
+      <div className="mb-5 text-4xl font-semibold tracking-widest text-ink">
         {total.toLocaleString()}
       </div>
 
       <button
         onClick={handleClick}
-        className="bg-accent text-canvas rounded-xl px-8 py-3 font-bold tracking-wide transition-transform active:scale-95"
+        className="bg-ink text-paper rounded-xl px-8 py-3 font-semibold tracking-wide transition-transform active:scale-95"
       >
         CLICK ME
       </button>
 
-      <p className="text-subtext0 mt-6 text-sm">
+      <p className="text-ink-secondary mt-6 text-sm">
         you've clicked {userClicks} times
       </p>
     </div>

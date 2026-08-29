@@ -11,9 +11,9 @@ export default function LinkWithIcon({ href, text, external, className = '' }: P
       href={href}
       target={external ? '_blank' : undefined}
       rel={external ? 'noopener noreferrer' : undefined}
-      className={`text-subtext1 hover:text-accent inline-flex items-center gap-1 transition-colors duration-200 ${className}`}
+      className={`text-ink-muted inline-flex items-center gap-1 ${className}`}
     >
-      {text}
+      <span className="sweep sweep-mint">{text}</span>
     </a>
   );
 }

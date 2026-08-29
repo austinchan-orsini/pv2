@@ -21,11 +21,11 @@ export default function SpotifyBox() {
   }, []);
 
   return (
-    <div className="border-surface0 bg-canvas rounded-xl border p-4 shadow-lg flex flex-col h-full">
-      <h3 className="text-text mb-3 flex items-center gap-2 text-sm font-semibold shrink-0">
-        <IconMusic size={16} className="text-accent" />
+    <div className="border-hairline bg-paper rounded-xl border p-4 flex flex-col aspect-square">
+      <h3 className="text-ink mb-3 flex items-center gap-2 text-sm font-semibold shrink-0">
+        <IconMusic size={16} className="text-mark" />
         {track?.isPlaying ? 'Now Playing' : 'Last Played'}
-        {track?.isPlaying && <IconPlayerPlay size={14} className="text-accent" />}
+        {track?.isPlaying && <IconPlayerPlay size={14} className="text-mark" />}
       </h3>
 
       <a
@@ -35,14 +35,14 @@ export default function SpotifyBox() {
         className="group flex flex-col flex-1 min-h-0"
       >
         {/* album art vertically centered */}
-        <div className="flex-1 flex items-center justify-center">
-        <div className="size-24 rounded-lg overflow-hidden bg-surface1">
+        <div className="flex-1 flex items-center justify-center min-h-0">
+        <div className="aspect-square w-2/3 max-w-40 rounded-lg overflow-hidden bg-bar-track">
           {error ? (
             <div className="flex h-full items-center justify-center">
-              <p className="text-subtext0 text-sm">Couldn't load Spotify</p>
+              <p className="text-ink-secondary text-sm">Couldn't load Spotify</p>
             </div>
           ) : !track ? (
-            <div className="animate-pulse h-full w-full bg-surface1" />
+            <div className="animate-pulse h-full w-full bg-bar-track" />
           ) : track.albumImageUrl ? (
             <img
               src={track.albumImageUrl}
@@ -51,7 +51,7 @@ export default function SpotifyBox() {
             />
           ) : (
             <div className="flex h-full items-center justify-center">
-              <IconMusic size={32} className="text-subtext1" />
+              <IconMusic size={32} className="text-ink-muted" />
             </div>
           )}
         </div>
@@ -60,10 +60,10 @@ export default function SpotifyBox() {
         {/* song info bottom-left */}
         {track && (
           <div className="mt-3 min-w-0 shrink-0">
-            <p className="text-text group-hover:text-accent truncate text-sm font-medium transition-colors">
+            <p className="text-ink group-hover:text-mark truncate text-sm font-medium transition-colors">
               {track.title}
             </p>
-            <p className="text-subtext0 truncate text-xs">{track.artist}</p>
+            <p className="text-ink-secondary truncate text-xs">{track.artist}</p>
           </div>
         )}
       </a>

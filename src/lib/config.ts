@@ -3,12 +3,12 @@ export const Site = {
   description: 'Software developer building cool things on the internet.',
   url: 'https://austinchanorsini.dev',
   repo: {
-    commitBaseUrl: 'https://github.com/austinchanorsini/commit/',
-    url: 'https://github.com/austinchanorsini',
+    commitBaseUrl: 'https://github.com/austinchan-orsini/commit/',
+    url: 'https://github.com/austinchan-orsini',
   },
   out: {
-    github: 'https://github.com/austinchanorsini',
-    linkedin: 'https://linkedin.com/in/austinchanorsini',
+    github: 'https://github.com/austinchan-orsini',
+    linkedin: 'https://linkedin.com/in/austinchan-orsini',
     email: 'achanorsini@gmail.com',
     calcom: 'https://cal.com/austin',
   },
@@ -33,7 +33,7 @@ export const mainNavItems: NavItem[] = [
 
 export const moreNavItems: NavItem[] = [
   { title: 'Blog', href: '/posts' },
-  { title: 'GitHub', href: 'https://github.com/austinchanorsini', external: true },
+  { title: 'GitHub', href: 'https://github.com/austinchan-orsini', external: true },
 ];
 
 export const socialLinks = [

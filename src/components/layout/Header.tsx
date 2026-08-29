@@ -22,7 +22,7 @@ export default function Header({ onToggleSidebar }: Props) {
       {/* Mobile hamburger */}
       <button
         onClick={onToggleSidebar}
-        className="text-text hover:text-accent rounded p-2 md:hidden transition-colors"
+        className="text-ink hover:text-ink-muted rounded p-2 md:hidden transition-colors"
         aria-label="Open navigation menu"
       >
         <IconMenu2 size={24} />
@@ -34,8 +34,8 @@ export default function Header({ onToggleSidebar }: Props) {
           <Link
             key={item.href}
             to={item.href}
-            className={`rounded px-3 py-2 text-sm font-medium transition-colors duration-150 ${
-              pathname === item.href ? 'text-accent' : 'text-text hover:text-accent'
+            className={`sweep sweep-butter text-ink rounded px-3 py-2 text-sm font-medium ${
+              pathname === item.href ? 'sweep-active' : ''
             }`}
           >
             {item.title}

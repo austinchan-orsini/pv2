@@ -76,21 +76,12 @@ const ICON_MAP: Record<string, ComponentType<{ size?: number; className?: string
 
 // ─── Tag colors ───────────────────────────────────────────────────────────────
 
-const TAG_COLORS: Record<string, string> = {
-  TypeScript:    '#89b4fa',
-  JavaScript:    '#f9e2af',
-  React:         '#74c7ec',
-  Python:        '#a6e3a1',
-  FastAPI:       '#94e2d5',
-  Go:            '#89dceb',
-  PostgreSQL:    '#8caaee',
-  SQLite:        '#b4befe',
-  Electron:      '#cba6f7',
-  'GitHub API':  '#cba6f7',
-  'Drizzle ORM': '#fab387',
-  'Chart.js':    '#f38ba8',
-};
-function tagColor(tag: string) { return TAG_COLORS[tag] ?? 'var(--ctp-accent)'; }
+const TAG_PALETTE = ['#a9d6c1', '#f0d79b', '#e9a3a9', '#c97f86'];
+function tagColor(tag: string) {
+  let hash = 0;
+  for (let i = 0; i < tag.length; i++) hash = (hash * 31 + tag.charCodeAt(i)) | 0;
+  return TAG_PALETTE[Math.abs(hash) % TAG_PALETTE.length];
+}
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -103,12 +94,12 @@ function StatCounter({
 }) {
   const n = useCountUp(stat.value, active);
   return (
-    <div className="bg-surface0 flex flex-col items-center rounded-xl px-4 py-5 gap-1">
-      <span className="text-accent font-mono text-3xl font-bold tabular-nums">
+    <div className="bg-bar-track flex flex-col items-center rounded-xl px-4 py-5 gap-1">
+      <span className="text-ink text-3xl font-semibold tabular-nums">
         {n.toLocaleString()}
         {stat.suffix ?? ''}
       </span>
-      <span className="text-subtext1 text-xs uppercase tracking-widest">{stat.label}</span>
+      <span className="text-ink-muted text-xs uppercase tracking-widest">{stat.label}</span>
     </div>
   );
 }
@@ -122,29 +113,29 @@ function CodeBlock({ code, filename }: { code: string; filename: string }) {
   };
   const lines = code.split('\n');
   return (
-    <div className="border-surface0 overflow-hidden rounded-xl border shadow-lg">
+    <div className="border-hairline overflow-hidden rounded-xl border">
       {/* Titlebar */}
-      <div className="bg-mantle flex items-center justify-between px-4 py-2.5 border-b border-surface0">
+      <div className="bg-ink flex items-center justify-between px-4 py-2.5 border-b border-paper/10">
         <div className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full bg-red opacity-70" />
-          <span className="h-3 w-3 rounded-full bg-yellow opacity-70" />
-          <span className="h-3 w-3 rounded-full bg-green opacity-70" />
-          <span className="text-subtext0 ml-3 font-mono text-xs">{filename}</span>
+          <span className="h-3 w-3 rounded-full bg-coral opacity-70" />
+          <span className="h-3 w-3 rounded-full bg-butter opacity-70" />
+          <span className="h-3 w-3 rounded-full bg-mint opacity-70" />
+          <span className="text-paper/70 ml-3 text-xs">{filename}</span>
         </div>
         <button
           onClick={copy}
-          className="text-subtext1 hover:text-accent flex items-center gap-1.5 rounded px-2 py-1 text-xs transition-colors hover:bg-surface0"
+          className="text-paper/70 hover:text-paper flex items-center gap-1.5 rounded px-2 py-1 text-xs transition-colors hover:bg-paper/10"
         >
           {copied ? <IconCheck size={12} /> : <IconCopy size={12} />}
           {copied ? 'Copied!' : 'Copy'}
         </button>
       </div>
       {/* Code */}
-      <div className="bg-crust overflow-x-auto p-4 font-mono text-sm leading-relaxed">
+      <div className="bg-ink overflow-x-auto p-4 text-sm leading-relaxed">
         {lines.map((line, i) => (
           <div key={i} className="flex gap-4 min-w-0">
-            <span className="text-overlay0 w-5 shrink-0 select-none text-right tabular-nums">{i + 1}</span>
-            <span className="text-subtext1 whitespace-pre">{line}</span>
+            <span className="text-paper/40 w-5 shrink-0 select-none text-right tabular-nums">{i + 1}</span>
+            <span className="text-paper/90 whitespace-pre">{line}</span>
           </div>
         ))}
       </div>
@@ -162,7 +153,7 @@ function ShineLink({ href, label, icon }: { href: string; label: string; icon?: 
       rel="noopener noreferrer"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="relative inline-flex overflow-hidden items-center gap-2 rounded-lg border border-accent/40 bg-accent/10 px-5 py-2.5 text-sm font-semibold text-accent transition-colors hover:bg-accent/20"
+      className="relative inline-flex overflow-hidden items-center gap-2 rounded-lg border border-mint/60 bg-mint/15 px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-mint/30"
     >
       <Icon size={15} />
       <span>{label}</span>
@@ -232,13 +223,13 @@ function HeroBanner({
 
       {/* Text content */}
       <div className="absolute bottom-0 left-0 p-6 md:p-8 max-w-2xl">
-        <h1 className="text-3xl font-bold text-white drop-shadow md:text-4xl">{title}</h1>
+        <h1 className="text-3xl font-semibold text-white drop-shadow md:text-4xl">{title}</h1>
         <p className="mt-2 text-sm text-white/75 leading-relaxed md:text-base">{description}</p>
         <div className="mt-3 flex flex-wrap gap-2">
           {tags.map((t) => (
             <span
               key={t}
-              className="rounded px-2 py-0.5 font-mono text-xs font-medium"
+              className="rounded px-2 py-0.5 text-xs font-medium"
               style={{ background: 'rgba(0,0,0,0.35)', color: tagColor(t) }}
             >
               {t}
@@ -263,17 +254,17 @@ export default function ProjectDetail() {
 
   if (!project) return <Navigate to="/projects" replace />;
 
-  const gradVars = project.gradientVars ?? ['--ctp-blue', '--ctp-mauve', '--ctp-sapphire', '--ctp-lavender'];
+  const gradVars = project.gradientVars ?? ['--mint', '--butter', '--coral', '--mark'];
 
   return (
     <div className="mx-auto max-w-4xl space-y-10 px-4 py-8 md:px-0">
       {/* Back */}
       <Link
         to="/projects"
-        className="text-subtext1 hover:text-accent inline-flex items-center gap-1.5 text-sm transition-colors"
+        className="text-ink-muted inline-flex items-center gap-1.5 text-sm"
       >
         <IconArrowLeft size={15} />
-        Back to Projects
+        <span className="sweep sweep-mint">Back to Projects</span>
       </Link>
 
       {/* Hero */}
@@ -286,7 +277,7 @@ export default function ProjectDetail() {
 
       {/* Meta row */}
       <div className="flex flex-wrap items-center gap-3 text-sm">
-        <span className="text-overlay1 font-mono">
+        <span className="text-ink-muted">
           {new Date(project.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
         </span>
       </div>
@@ -302,34 +293,34 @@ export default function ProjectDetail() {
 
       {/* Long description */}
       {project.longDescription && (
-        <div className="border-surface0 bg-canvas rounded-xl border p-6 shadow-lg">
-          <h2 className="text-text mb-3 text-lg font-semibold">About</h2>
-          <p className="text-subtext0 leading-relaxed">{project.longDescription}</p>
+        <div className="border-hairline bg-paper rounded-xl border p-6">
+          <h2 className="text-ink mb-3 text-lg font-semibold">About</h2>
+          <p className="text-ink-secondary leading-relaxed">{project.longDescription}</p>
         </div>
       )}
 
       {/* Features */}
       {project.features && (
         <div ref={featuresRef}>
-          <h2 className="text-text mb-5 text-lg font-semibold">Features</h2>
+          <h2 className="text-ink mb-5 text-lg font-semibold">Features</h2>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {project.features.map((feature, i) => {
               const Icon = ICON_MAP[feature.iconName] ?? IconFileText;
               return (
                 <div
                   key={feature.title}
-                  className="border-surface0 bg-canvas rounded-xl border p-5 shadow"
+                  className="border-hairline bg-paper rounded-xl border p-5"
                   style={{
                     opacity: featuresInView ? 1 : 0,
                     transform: featuresInView ? 'translateY(0)' : 'translateY(18px)',
                     transition: `opacity 0.45s ease ${i * 0.08}s, transform 0.45s ease ${i * 0.08}s`,
                   }}
                 >
-                  <div className="text-accent mb-3">
+                  <div className="text-mark mb-3">
                     <Icon size={20} />
                   </div>
-                  <h3 className="text-text mb-1 text-sm font-semibold">{feature.title}</h3>
-                  <p className="text-subtext0 text-xs leading-relaxed">{feature.description}</p>
+                  <h3 className="text-ink mb-1 text-sm font-semibold">{feature.title}</h3>
+                  <p className="text-ink-secondary text-xs leading-relaxed">{feature.description}</p>
                 </div>
               );
             })}
@@ -343,7 +334,7 @@ export default function ProjectDetail() {
           ref={codeRef}
           style={{ opacity: codeInView ? 1 : 0, transition: 'opacity 0.55s ease 0.1s' }}
         >
-          <h2 className="text-text mb-4 text-lg font-semibold">Code Snippet</h2>
+          <h2 className="text-ink mb-4 text-lg font-semibold">Code Snippet</h2>
           <CodeBlock code={project.codeSnippet.code} filename={project.codeSnippet.filename} />
         </div>
       )}
@@ -359,36 +350,35 @@ export default function ProjectDetail() {
 
       {/* Related projects */}
       {related.length > 0 && (
-        <div className="border-t border-surface0 pt-10">
-          <h2 className="text-text mb-5 text-lg font-semibold">More Projects</h2>
+        <div className="border-t border-hairline pt-10">
+          <h2 className="text-ink mb-5 text-lg font-semibold">More Projects</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {related.map((p) => (
               <Link
                 key={p.slug}
                 to={`/projects/${p.slug}`}
-                className="border-surface0 bg-canvas hover:border-accent group rounded-xl border p-5 shadow transition-colors duration-200"
+                className="border-hairline bg-paper hover:border-ink group rounded-xl border p-5 transition-colors duration-200"
               >
                 {/* Mini gradient bar */}
                 <div
                   className="mb-4 h-1.5 w-full rounded-full opacity-60"
                   style={{
-                    background: `linear-gradient(to right, var(${(p.gradientVars ?? ['--ctp-accent', '--ctp-blue'])[0]}), var(${(p.gradientVars ?? ['--ctp-accent', '--ctp-blue'])[2] ?? (p.gradientVars ?? [])[0]}))`,
+                    background: `linear-gradient(to right, var(${(p.gradientVars ?? ['--mint', '--butter'])[0]}), var(${(p.gradientVars ?? ['--mint', '--butter'])[2] ?? (p.gradientVars ?? [])[0]}))`,
                   }}
                 />
-                <h3 className="text-text group-hover:text-accent mb-1 font-semibold transition-colors">
+                <h3 className="text-ink group-hover:text-mark mb-1 font-semibold transition-colors">
                   {p.title}
                 </h3>
-                <p className="text-subtext0 line-clamp-2 text-sm">{p.description}</p>
+                <p className="text-ink-secondary line-clamp-2 text-sm">{p.description}</p>
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {p.tags.slice(0, 3).map((t) => (
                     <span
                       key={t}
-                      className="rounded px-2 py-0.5 font-mono text-xs"
+                      className="rounded px-2 py-0.5 text-xs"
                       style={{
-                        borderColor: `${tagColor(t)}30`,
-                        color: tagColor(t),
-                        backgroundColor: `${tagColor(t)}12`,
-                        border: `1px solid ${tagColor(t)}30`,
+                        color: 'var(--ink-secondary)',
+                        backgroundColor: `${tagColor(t)}40`,
+                        border: `1px solid ${tagColor(t)}80`,
                       }}
                     >
                       {t}

@@ -27,21 +27,21 @@ export default function FunFactsBox() {
   }
 
   return (
-    <div className="border-surface0 bg-canvas rounded-xl border p-4 shadow-lg flex flex-col h-full">
+    <div className="border-hairline bg-paper rounded-xl border p-4 flex flex-col h-full">
       <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-text flex items-center gap-2 text-sm font-semibold">
-          <IconSparkles size={16} className="text-accent" />
+        <h3 className="text-ink flex items-center gap-2 text-sm font-semibold">
+          <IconSparkles size={16} className="text-mark" />
           Fun Fact
         </h3>
         <button
           onClick={randomize}
-          className="text-subtext1 hover:text-accent transition-colors"
+          className="text-ink-muted hover:text-ink transition-colors"
           aria-label="Randomize fact"
         >
           <IconDice size={16} className={spinning ? 'animate-spin' : ''} />
         </button>
       </div>
-      <p className="text-subtext1 text-base leading-relaxed flex-1">{facts[index]}</p>
+      <p className="text-ink-secondary text-base leading-relaxed flex-1">{facts[index]}</p>
     </div>
   );
 }

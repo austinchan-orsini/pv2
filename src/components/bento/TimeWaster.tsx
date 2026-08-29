@@ -90,48 +90,50 @@ export default function TimeWaster() {
   );
 
   return (
-    <div className="border-surface0 bg-canvas rounded-xl border p-4 shadow-lg sm:col-span-2 lg:col-span-1">
-      <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-text flex items-center gap-2 text-sm font-semibold">
-          <IconDeviceGamepad2 size={16} className="text-accent" />
+    <div className="border-hairline bg-paper rounded-xl border p-4 sm:col-span-2 lg:col-span-1 aspect-square flex flex-col">
+      <div className="mb-3 flex items-center justify-between shrink-0">
+        <h3 className="text-ink flex items-center gap-2 text-sm font-semibold">
+          <IconDeviceGamepad2 size={16} className="text-mark" />
           Time Waster
         </h3>
-        <span className="text-accent font-mono text-xs">
+        <span className="text-ink text-xs">
           {state.score} pt{state.score !== 1 ? 's' : ''}
         </span>
       </div>
 
-      <div
-        className="border-surface0 relative overflow-hidden rounded border"
-        style={{ display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)` }}
-        onKeyDown={(e) => e.preventDefault()}
-      >
-        {cells.flat().map(({ x, y, isHead, isBody, isFood }) => (
-          <div
-            key={`${x}-${y}`}
-            className={`aspect-square ${
-              isHead ? 'bg-accent' :
-              isBody ? 'bg-accent/50' :
-              isFood ? 'bg-red' :
-              'bg-canvas'
-            }`}
-            style={{ width: '100%' }}
-          />
-        ))}
-        {!state.alive && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-canvas/80 backdrop-blur-sm">
-            <p className="text-text text-sm font-semibold">Game Over — {state.score} pts</p>
-            <button
-              onClick={restart}
-              className="bg-accent text-canvas rounded px-3 py-1 text-xs font-medium"
-            >
-              Restart
-            </button>
-          </div>
-        )}
+      <div className="flex-1 min-h-0 flex items-center justify-center">
+        <div
+          className="border-hairline relative overflow-hidden rounded border"
+          style={{ display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, width: '100%' }}
+          onKeyDown={(e) => e.preventDefault()}
+        >
+          {cells.flat().map(({ x, y, isHead, isBody, isFood }) => (
+            <div
+              key={`${x}-${y}`}
+              className={`aspect-square ${
+                isHead ? 'bg-ink' :
+                isBody ? 'bg-ink/50' :
+                isFood ? 'bg-coral' :
+                'bg-paper'
+              }`}
+              style={{ width: '100%' }}
+            />
+          ))}
+          {!state.alive && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-paper/80 backdrop-blur-sm">
+              <p className="text-ink text-sm font-semibold">Game Over — {state.score} pts</p>
+              <button
+                onClick={restart}
+                className="bg-ink text-paper rounded px-3 py-1 text-xs font-medium"
+              >
+                Restart
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
-      <p className="text-subtext0 mt-2 text-center text-xs">WASD to move</p>
+      <p className="text-ink-secondary mt-2 text-center text-xs shrink-0">WASD to move</p>
     </div>
   );
 }
