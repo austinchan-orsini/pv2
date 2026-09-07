@@ -160,10 +160,10 @@ export const projects: Project[] = [
     tags: ['JavaScript', 'Node.js', 'Discord.js', 'Twilio', 'SQLite', 'Express'],
     featured: true,
     gradientVars: ['--mint', '--butter', '--coral', '--mark'],
-    image: { url: '/projects/jobpulsedemo.png', alt: 'Job Pulse Discord bot posting new internship alerts from SimplifyJobs and Peak in a #job-alerts channel' },
+    image: { url: '/projects/jobpulse/demo.png', alt: 'Job Pulse Discord bot posting new internship alerts from SimplifyJobs and Peak in a #job-alerts channel' },
     screenshots: [
-      { url: '/projects/jobpulsedesc.png', alt: 'Job Pulse\'s Discord app profile: "Get alerted when jobs are posted to github repos so you can get rejected faster!"' },
-      { url: '/projects/jobpulsedemo.png', alt: 'Job Pulse Discord bot posting new internship alerts from SimplifyJobs and Peak in a #job-alerts channel' },
+      { url: '/projects/jobpulse/desc.png', alt: 'Job Pulse\'s Discord app profile: "Get alerted when jobs are posted to github repos so you can get rejected faster!"' },
+      { url: '/projects/jobpulse/demo.png', alt: 'Job Pulse Discord bot posting new internship alerts from SimplifyJobs and Peak in a #job-alerts channel' },
     ],
     screenshotAspect: '367 / 576',
     longDescription:
