@@ -18,7 +18,7 @@ export default function About() {
 
           <div className="space-y-4 md:col-span-2">
             <p className="text-ink-secondary text-base leading-relaxed">
-              <b className="text-ink">Hey!</b> I'm Austin Chan-Orsini — a software developer
+              <b className="text-ink">Hey!</b> I'm Austin Chan-Orsini, a software developer
               based in [your city]. I enjoy building projects that are useful, interesting,
               or at minimum look cool.
             </p>

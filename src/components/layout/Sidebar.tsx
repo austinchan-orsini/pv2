@@ -2,7 +2,7 @@ import { IconX } from '@tabler/icons-react';
 import { Link, useLocation } from 'react-router-dom';
 import { mainNavItems, moreNavItems } from '../../lib/config';
 
-const NAV_SWEEP = ['sweep-mint', 'sweep-butter', 'sweep-coral', 'sweep-mark'];
+const NAV_SWEEP = ['sweep-mint', 'sweep-butter', 'sweep-coral', 'sweep-sky'];
 
 type Props = { isOpen: boolean; onClose: () => void };
 

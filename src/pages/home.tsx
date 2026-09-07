@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import {
-  IconArrowRight, IconActivity, IconExternalLink,
+  IconArrowRight, IconActivity, IconExternalLink, IconBrandGithub, IconBrandLinkedin,
 } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 import { Site, socialLinks } from '../lib/config';
 
 type Commit = { message: string; repo: string; repoUrl: string; commitUrl: string; sha: string; date: string; additions?: number; deletions?: number };
 import { featuredProjects } from '../lib/data';
-import LinkWithIcon from '../components/LinkWithIcon';
 import Experience from '../components/Experience';
 import Featured from '../components/Featured';
 import Snake from '../components/bento/Snake';
@@ -37,25 +36,32 @@ export default function Home() {
         <p className="text-ink-secondary max-w-prose text-base leading-relaxed">
           I'm a software developer who likes building things that actually matter. I write
           code in TypeScript, Python, and whatever the job calls for. Currently open to interesting
-          opportunities — feel free to{' '}
+          opportunities, feel free to{' '}
           <a href={`mailto:${Site.out.email}`} className="link">reach out</a>.
         </p>
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-2">
-          {socialLinks.map((link, i) => (
-            <span key={link.href} className="flex items-center gap-4">
-              <LinkWithIcon href={link.href} text={link.text} external={link.external} className="text-sm" />
-              {i < socialLinks.length - 1 && (
-                <span className="text-hairline text-xs">|</span>
-              )}
-            </span>
-          ))}
+          {socialLinks.map((link) => {
+            const Icon = link.text === 'GitHub' ? IconBrandGithub : IconBrandLinkedin;
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                target={link.external ? '_blank' : undefined}
+                rel={link.external ? 'noopener noreferrer' : undefined}
+                aria-label={link.text}
+                className="text-ink-muted hover:text-ink transition-colors"
+              >
+                <Icon size={18} />
+              </a>
+            );
+          })}
           <span className="text-hairline text-xs">|</span>
           <Link
             to="/about"
             className="group inline-flex items-center gap-1 text-sm"
           >
-            <span className="sweep sweep-mint text-ink-muted">More about me</span>
+            <span className="text-ink-muted underline decoration-butter decoration-2 underline-offset-4">More about me</span>
             <IconArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>

@@ -46,7 +46,7 @@ export default function Footer() {
       <footer className="bg-paper text-ink-secondary border-hairline flex flex-col items-center justify-between gap-3 rounded-lg border p-5 text-sm md:grid md:grid-cols-3 md:gap-0">
         <div className="flex items-center gap-3 md:justify-self-start">
           <span>© {year} {Site.seo.author}</span>
-          <span className="text-hairline hidden md:inline">—</span>
+          <span className="text-hairline hidden md:inline">·</span>
           <div className="flex items-center gap-1.5">
             <span className="relative flex h-3 w-3">
               <span className="bg-mark/75 absolute inline-flex h-full w-full animate-ping rounded-full" />

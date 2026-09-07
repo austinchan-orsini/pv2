@@ -121,7 +121,7 @@ export default function Snake() {
           ))}
           {!state.alive && (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-paper/80 backdrop-blur-sm">
-              <p className="text-ink text-sm font-semibold">Game Over — {state.score} pts</p>
+              <p className="text-ink text-sm font-semibold">Game Over: {state.score} pts</p>
               <button
                 onClick={restart}
                 className="bg-ink text-paper rounded px-3 py-1 text-xs font-medium"

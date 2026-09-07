@@ -152,32 +152,42 @@ export const technicalSkills = {
 
 export const projects: Project[] = [
   {
-    slug: 'gh-job-alerts',
-    title: 'GH Job Alerts',
+    slug: 'job-pulse',
+    title: 'Job Pulse',
     description:
-      'A self-hosted Discord bot (with optional SMS) that pings you the instant a new role is posted to a GitHub job-board repo — no more refreshing README tables.',
+      'A Discord bot (with optional SMS) that watches GitHub job-board repos like SimplifyJobs and pings you the instant a new role is posted. No more refreshing README tables hoping to catch one before it fills up.',
     date: '2026-06-01',
-    tags: ['JavaScript', 'Node.js', 'Discord.js', 'Twilio'],
+    tags: ['JavaScript', 'Node.js', 'Discord.js', 'Twilio', 'SQLite', 'Express'],
     featured: true,
     gradientVars: ['--mint', '--butter', '--coral', '--mark'],
+    image: { url: '/projects/jobpulsedemo.png', alt: 'Job Pulse Discord bot posting new internship alerts from SimplifyJobs and Peak in a #job-alerts channel' },
+    screenshots: [
+      { url: '/projects/jobpulsedesc.png', alt: 'Job Pulse\'s Discord app profile: "Get alerted when jobs are posted to github repos so you can get rejected faster!"' },
+      { url: '/projects/jobpulsedemo.png', alt: 'Job Pulse Discord bot posting new internship alerts from SimplifyJobs and Peak in a #job-alerts channel' },
+    ],
+    screenshotAspect: '367 / 576',
     longDescription:
-      "I kept missing new listings on the job-board repos I was tracking because I'd forget to refresh the page. GH Job Alerts polls those repos every 10 minutes, diffs the markdown tables between commits, and fires an alert the moment a row is added — over Discord slash commands or, if you self-host with a Twilio account, straight to your phone as a text.",
+      "Boards like SimplifyJobs/Summer2026-Internships and speedyapply/2027-SWE-College-Jobs are just markdown tables in a GitHub README, updated by maintainers dozens of times a day. There's no RSS feed, no API, and the best roles fill up within hours of posting. Job Pulse watches the underlying repo instead of the page: it polls for new commits, diffs the job table to find rows that weren't there before, and pushes an alert the moment one appears, over a shared Discord bot you can add to your own server in one click, or SMS and a web dashboard if you self-host.",
     features: [
       {
-        title: 'Discord + SMS Alerts',
-        description: 'Add the official bot to your server for zero-setup alerts, or self-host with a GitHub token and optional Twilio account for SMS.',
+        title: 'One-click Discord bot',
+        description: 'Add the shared bot to your server and run /subscribe repo:<repo>; alerts for new postings show up in your channel automatically, no hosting required.',
       },
       {
-        title: '10-Minute Polling',
-        description: 'Checks every tracked repo on a 10-minute cycle and diffs commits against the last-seen SHA — no missed pushes.',
+        title: 'Self-hosted SMS',
+        description: 'Run your own instance to get alerts as texts via Twilio, plus your own independent copy of the multi-server Discord bot.',
       },
       {
-        title: 'Web Dashboard',
-        description: 'A dashboard for managing which repos, branches, and files you\'re tracking across multiple servers.',
+        title: '10-minute polling with dedup',
+        description: 'Checks watched repos on a cron schedule (default every 10 minutes), diffs the README against the last commit, and skips anything already seen in the SQLite database.',
       },
       {
-        title: 'Multi-Format Parsing',
-        description: 'Handles several different markdown job-table formats used across popular job-board repos.',
+        title: 'Web dashboard',
+        description: 'Add or pause repos, trigger a manual poll, and view recent alerts from a small Express-served dashboard.',
+      },
+      {
+        title: 'Multi-format parsing',
+        description: 'Handles both the SimplifyJobs and SpeedyApply markdown table formats used across popular internship and new-grad boards.',
       },
     ],
     links: [
@@ -189,7 +199,7 @@ export const projects: Project[] = [
     slug: 'streak',
     title: 'Streak',
     description:
-      'A 75 Hard tracking web app — a daily checklist for the core rules plus your own custom tasks, a color-coded calendar, and a confetti burst every time you check something off.',
+      'A 75 Hard tracking web app: a daily checklist for the core rules plus your own custom tasks, a color-coded calendar, and a confetti burst every time you check something off.',
     date: '2026-07-01',
     tags: ['TypeScript', 'React', 'Firebase', 'Framer Motion'],
     featured: true,
@@ -198,19 +208,19 @@ export const projects: Project[] = [
     screenshots: [
       { url: '/projects/streak/landing.png', alt: 'Streak landing page: "build the habit, every single day"' },
       { url: '/projects/streak/daily-progress.png', alt: 'Daily progress screen showing core tasks and custom tasks with a completion bar' },
-      { url: '/projects/streak/calendar.png', alt: 'Calendar view color-coded by day — purple for a perfect day, green for core tasks done' },
+      { url: '/projects/streak/calendar.png', alt: 'Calendar view color-coded by day: purple for a perfect day, green for core tasks done' },
       { url: '/projects/streak/edit.png', alt: 'Edit day modal for going back and updating a past day’s checklist' },
     ],
     screenshotAspect: '1917 / 867',
     stackedMedia: true,
     longDescription:
-      "Streak is a web app for running the 75 Hard challenge — two workouts, a gallon of water, 10 pages, sticking to your diet, and a progress photo, every day for 75 days straight. I built it because the spreadsheet I was using to track my own run wasn't fun to look at. On top of the six core rules you can add your own tasks with their own cadence, tag workouts by type, and go back and edit any past day from the calendar. It's backed by Firebase, so your run follows you across devices instead of living in one browser tab.",
+      "Streak is a web app for running the 75 Hard challenge: two workouts, a gallon of water, 10 pages, sticking to your diet, and a progress photo, every day for 75 days straight. I built it because the spreadsheet I was using to track my own run wasn't fun to look at. On top of the six core rules you can add your own tasks with their own cadence, tag workouts by type, and go back and edit any past day from the calendar. It's backed by Firebase, so your run follows you across devices instead of living in one browser tab.",
     realWorldValue:
-      "Habit trackers live or die on whether you actually open them the next day, and most people fall off 75 Hard — or any streak — not because the rules are hard, but because they lose track of where they stand. A calendar you can scan in two seconds, progress that follows you from your phone to your laptop, and a small hit of feedback when you check something off are the difference between a tracker you keep using and a spreadsheet you abandon by week two. It's also a full product rather than just a UI — real auth, sync, and persistence through Firebase — which is a different problem than laying out a checklist.",
+      "Habit trackers live or die on whether you actually open them the next day, and most people fall off 75 Hard, or any streak, not because the rules are hard, but because they lose track of where they stand. A calendar you can scan in two seconds, progress that follows you from your phone to your laptop, and a small hit of feedback when you check something off are the difference between a tracker you keep using and a spreadsheet you abandon by week two. It's also a full product rather than just a UI: real auth, sync, and persistence through Firebase, which is a different problem than laying out a checklist.",
     features: [
       {
         title: 'Core tasks plus your own',
-        description: 'The six 75 Hard rules are built in, and you can add custom tasks on top — daily, weekdays only, or whatever cadence you set.',
+        description: 'The six 75 Hard rules are built in, and you can add custom tasks on top: daily, weekdays only, or whatever cadence you set.',
       },
       {
         title: 'Tap to complete, with confetti',
@@ -218,11 +228,11 @@ export const projects: Project[] = [
       },
       {
         title: 'Workout tagging',
-        description: 'Tag each workout with a type — run, gym, yoga, swim, hike, and a handful more — or add your own.',
+        description: 'Tag each workout with a type: run, gym, yoga, swim, hike, and a handful more, or add your own.',
       },
       {
         title: 'Calendar heatmap',
-        description: 'A full month view color-coded by how the day went, so you can see your whole run — and any misses — at a glance.',
+        description: 'A full month view color-coded by how the day went, so you can see your whole run, and any misses, at a glance.',
       },
       {
         title: 'Edit past days',
@@ -243,7 +253,7 @@ export const projects: Project[] = [
     slug: 'zetamac',
     title: 'Zetamac Stats Tracker',
     description:
-      'A Chrome extension with 200+ installs that injects a full analytics dashboard into Zetamac, the mental-math game — per-operation breakdowns, carry/borrow detection, and score history charts.',
+      'A Chrome extension with 200+ installs that injects a full analytics dashboard into Zetamac, the mental-math game: per-operation breakdowns, carry/borrow detection, and score history charts.',
     date: '2026-01-01',
     tags: ['JavaScript', 'Chrome Extension', 'Manifest V3', 'Chart.js'],
     featured: false,
@@ -258,11 +268,11 @@ export const projects: Project[] = [
     longDescription:
       "I wanted to know which arithmetic I was actually slow at instead of just watching my Zetamac score go up. This started as a content script that logs every question and answer, and grew into a full stats dashboard the extension injects right next to the game: an overview with lifetime and rolling-window views, separate tabs for each operation, and color-coded breakdowns down to the individual number (which divisors trip me up, which times tables are automatic, whether a subtraction problem needs borrowing). It's live on the Chrome Web Store with 200+ installs.",
     realWorldValue:
-      "Most people practicing mental math just watch a single score go up or down — there's no way to tell if you're actually improving or just having a good day. Turning that into structured data, down to the specific operation and number, is what makes practice targeted instead of random: you can see you're consistently slow on ÷9 or borrow-heavy subtraction and drill exactly that instead of guessing. It's also a real example of shipping a browser extension end-to-end — reading and reacting to a third-party page's DOM, persisting state locally, and getting it in front of 200+ real users on the Chrome Web Store instead of leaving it as a script only I ever ran.",
+      "Most people practicing mental math just watch a single score go up or down. There's no way to tell if you're actually improving or just having a good day. Turning that into structured data, down to the specific operation and number, is what makes practice targeted instead of random: you can see you're consistently slow on ÷9 or borrow-heavy subtraction and drill exactly that instead of guessing. It's also a real example of shipping a browser extension end-to-end: reading and reacting to a third-party page's DOM, persisting state locally, and getting it in front of 200+ real users on the Chrome Web Store instead of leaving it as a script only I ever ran.",
     features: [
       {
         title: 'Stats panel right in the page',
-        description: "Injects a panel next to the game itself — games played, average score, last game, top 3 scores — and you can flip between lifetime stats and just your last 10 or 50 games.",
+        description: "Injects a panel next to the game itself: games played, average score, last game, top 3 scores, and you can flip between lifetime stats and just your last 10 or 50 games.",
       },
       {
         title: 'Score history chart',
@@ -278,7 +288,7 @@ export const projects: Project[] = [
       },
       {
         title: 'Everything stays local',
-        description: 'No account, no backend — games are saved with chrome.storage.local and never leave your browser.',
+        description: 'No account, no backend. Games are saved with chrome.storage.local and never leave your browser.',
       },
     ],
     links: [
@@ -291,14 +301,14 @@ export const projects: Project[] = [
     slug: 'padly',
     title: 'Padly',
     description:
-      'A Google-authenticated housing marketplace for Boston College students — map-based listings, real-time chat, and roommate matching, built with a 9-person team for a software engineering course.',
+      'A Google-authenticated housing marketplace for Boston College students: map-based listings, real-time chat, and roommate matching, built with a 9-person team for a software engineering course.',
     date: '2026-04-01',
     tags: ['Django', 'Python', 'Django Channels', 'Team Project'],
     featured: false,
     gradientVars: ['--mark', '--mint', '--butter', '--coral'],
     image: { url: '/projects/padly/listings.jpg', alt: 'Padly listings page with a map of nearby sublets and a filterable list view' },
     screenshots: [
-      { url: '/projects/padly/home.jpg', alt: 'Padly landing page — "Find a place near campus," rentals and subleases near Boston College' },
+      { url: '/projects/padly/home.jpg', alt: 'Padly landing page: "Find a place near campus," rentals and subleases near Boston College' },
       { url: '/projects/padly/listings.jpg', alt: 'Listings page with a MapLibre map of nearby sublets alongside a filterable list view' },
       { url: '/projects/padly/roommates.png', alt: 'Roommate matching page with group posts, match percentage, and a message-lead button' },
       { url: '/projects/padly/messages.png', alt: 'Real-time messaging inbox between roommate matches' },
@@ -307,9 +317,9 @@ export const projects: Project[] = [
     screenshotAspect: '8 / 5',
     stackedMedia: true,
     longDescription:
-      "Padly was a semester-long team project for my software engineering course (CSCI3356) — a housing and subletting marketplace for Boston College students, built by a 9-person team over 269 commits. It's Google-OAuth-only with no password fallback, with role-based access for students, realtors, moderators, support, and admins; real-time chat over WebSockets via Django Channels; verified-address listings geocoded through the Geoapify API and browsable on a map; and a full moderation and reporting pipeline behind it, backed by roughly 440 automated tests. My own commits were a small slice of that — mostly the listing-creation form fields and fixes to the dashboard and profile toggle — while the team collectively built out auth, messaging, moderation, and the test suite.",
+      "Padly was a semester-long team project for my software engineering course (CSCI3356): a housing and subletting marketplace for Boston College students, built by a 9-person team over 269 commits. It's Google-OAuth-only with no password fallback, with role-based access for students, realtors, moderators, support, and admins; real-time chat over WebSockets via Django Channels; verified-address listings geocoded through the Geoapify API and browsable on a map; and a full moderation and reporting pipeline behind it, backed by roughly 440 automated tests. My own commits were a small slice of that, mostly the listing-creation form fields and fixes to the dashboard and profile toggle, while the team collectively built out auth, messaging, moderation, and the test suite.",
     realWorldValue:
-      "Off-campus subletting at BC mostly happens through sprawling Facebook groups and group chats with no verification — no way to know if a listing address is real, who you're actually messaging, or whether a \"landlord\" is who they say they are. Padly ties every account to a Google-verified BC identity, geocodes listings against a real address before they go live, and gives moderators an actual reporting and investigation workflow instead of hoping people self-police a group chat. Trust and verification at that scale is the kind of infrastructure problem a class project doesn't usually get to touch, which is what made it worth a team's whole semester.",
+      "Off-campus subletting at BC mostly happens through sprawling Facebook groups and group chats with no verification: no way to know if a listing address is real, who you're actually messaging, or whether a \"landlord\" is who they say they are. Padly ties every account to a Google-verified BC identity, geocodes listings against a real address before they go live, and gives moderators an actual reporting and investigation workflow instead of hoping people self-police a group chat. Trust and verification at that scale is the kind of infrastructure problem a class project doesn't usually get to touch, which is what made it worth a team's whole semester.",
     features: [
       {
         title: 'Google-OAuth-only accounts',
@@ -345,13 +355,13 @@ export const projects: Project[] = [
     slug: 'nibl',
     title: 'Nibl',
     description:
-      'A cooking app I\'m building on the side — recipe discovery and meal planning. Private repo, still early.',
+      'A cooking app I\'m building on the side: recipe discovery and meal planning. Private repo, still early.',
     date: '2026-07-01',
     tags: ['Personal Project', 'Work in Progress'],
     featured: false,
     gradientVars: ['--coral', '--mint', '--mark', '--butter'],
     longDescription:
-      "Nibl is a personal side project — a cooking app for recipe discovery and meal planning. It's still early and living in a private repo while I figure out the shape of it, so consider this card a placeholder until it's further along.",
+      "Nibl is a personal side project: a cooking app for recipe discovery and meal planning. It's still early and living in a private repo while I figure out the shape of it, so consider this card a placeholder until it's further along.",
     features: [
       {
         title: 'Recipe Discovery',
@@ -368,13 +378,13 @@ export const projects: Project[] = [
     slug: 'facial-recognition',
     title: 'Facial Recognition',
     description:
-      'An experiment in real-time facial detection and recognition. Placeholder card — write-up coming once there\'s more to show.',
+      'An experiment in real-time facial detection and recognition. Placeholder card: write-up coming once there\'s more to show.',
     date: '2026-08-01',
     tags: ['Python', 'OpenCV', 'Computer Vision'],
     featured: false,
     gradientVars: ['--butter', '--mark', '--coral', '--mint'],
     longDescription:
-      "This is a placeholder for a facial recognition project I'm still working through — real-time face detection, landmarks, and matching against a small known-faces database. Details and a real write-up go here once it's further along.",
+      "This is a placeholder for a facial recognition project I'm still working through: real-time face detection, landmarks, and matching against a small known-faces database. Details and a real write-up go here once it's further along.",
     features: [
       {
         title: 'Face Detection',

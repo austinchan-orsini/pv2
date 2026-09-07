@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { mainNavItems } from '../../lib/config';
 import Breadcrumb from './Breadcrumb';
 
-const NAV_SWEEP = ['sweep-mint', 'sweep-butter', 'sweep-coral', 'sweep-mark'];
+const NAV_SWEEP = ['sweep-mint', 'sweep-butter', 'sweep-coral', 'sweep-sky'];
 
 type Props = { onToggleSidebar: () => void };
 

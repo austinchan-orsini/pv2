@@ -14,6 +14,7 @@
   --butter: #f0d79b;
   --coral:  #e9a3a9;
   --mark:   #c97f86;
+  --sky:    #9cc3e0;
 }
 
 /* ─── Tailwind v4 theme mapping ───────────────────────────────────────────── */
@@ -83,6 +84,7 @@ body {
 .sweep-butter { --sweep-color: var(--butter); }
 .sweep-coral  { --sweep-color: var(--coral); }
 .sweep-mark   { --sweep-color: var(--mark); }
+.sweep-sky    { --sweep-color: var(--sky); }
 
 @media (prefers-reduced-motion: reduce) {
   .sweep { transition: none; }

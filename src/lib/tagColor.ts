@@ -1,4 +1,15 @@
-const TAG_PALETTE = ['#a9d6c1', '#f0d79b', '#e9a3a9', '#c97f86'];
+const TAG_PALETTE = [
+  '#a9d6c1', // mint
+  '#f0d79b', // butter
+  '#e9a3a9', // coral
+  '#c97f86', // mark
+  '#9cc3e0', // sky blue
+  '#c4aee0', // lavender
+  '#8fd0c4', // teal
+  '#f0b98d', // peach
+  '#b8d68a', // sage
+  '#e8aac9', // rose
+];
 
 export function tagColor(tag: string): string {
   let hash = 0;

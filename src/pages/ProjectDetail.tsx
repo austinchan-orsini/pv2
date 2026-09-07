@@ -419,7 +419,7 @@ export default function ProjectDetail() {
                 <span className="text-mark mt-1.5 h-1 w-1 shrink-0 rounded-full bg-current" />
                 <span>
                   <span className="text-ink font-semibold">{feature.title}</span>
-                  {' — '}
+                  {': '}
                   {feature.description}
                 </span>
               </li>
