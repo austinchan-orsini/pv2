@@ -2,8 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import {
   IconArrowLeft,
+  IconArrowUpRight,
   IconBrandGithub,
   IconBrandChrome,
+  IconBrandDiscord,
   IconExternalLink,
   IconChevronLeft,
   IconChevronRight,
@@ -48,6 +50,26 @@ function useInView(threshold = 0.15) {
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
+// Shows every shot in one row at a shared height; each shot needs its aspect.
+function ScreenshotRow({ shots }: { shots: { url: string; alt: string; aspect?: string }[] }) {
+  return (
+    <div className="mx-auto flex w-full max-w-2xl gap-3">
+      {shots.map((shot) => {
+        const [w, h] = (shot.aspect ?? '1 / 1').split('/').map(Number);
+        return (
+          <div
+            key={shot.url}
+            className="border-hairline bg-ink/5 min-w-0 overflow-hidden rounded-xl border"
+            style={{ flex: w / h, aspectRatio: shot.aspect }}
+          >
+            <img src={shot.url} alt={shot.alt} className="h-full w-full object-cover" />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function ScreenshotGallery({
   shots,
   aspect = '3 / 4',
@@ -90,6 +112,20 @@ function ScreenshotGallery({
             >
               <IconChevronRight size={16} />
             </button>
+            {/* Dots: one per photo, the current one stretched into a pill */}
+            <div className="absolute bottom-2.5 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/35 px-2 py-1.5">
+              {shots.map((shot, i) => (
+                <button
+                  key={shot.url}
+                  onClick={() => setIndex(i)}
+                  aria-label={`Show screenshot ${i + 1} of ${shots.length}`}
+                  aria-current={i === index}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    i === index ? 'w-5 bg-white' : 'w-1.5 bg-white/55 hover:bg-white/80'
+                  }`}
+                />
+              ))}
+            </div>
           </>
         )}
       </div>
@@ -143,17 +179,21 @@ function ShineLink({ href, label, icon }: { href: string; label: string; icon?: 
 }
 
 function IconLink({ href, label, icon }: { href: string; label: string; icon?: string }) {
-  const Icon = icon === 'github' ? IconBrandGithub : icon === 'chrome' ? IconBrandChrome : IconExternalLink;
+  const Icon =
+    icon === 'github' ? IconBrandGithub
+    : icon === 'chrome' ? IconBrandChrome
+    : icon === 'discord' ? IconBrandDiscord
+    : IconExternalLink;
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={label}
-      title={label}
-      className="text-ink-muted hover:text-ink transition-colors"
+      className="border-hairline bg-paper text-ink-secondary hover:text-ink hover:border-mint hover:bg-mint/15 inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-colors"
     >
-      <Icon size={18} />
+      <Icon size={15} />
+      <span>{label}</span>
+      <IconArrowUpRight size={12} className="opacity-60" />
     </a>
   );
 }
@@ -234,7 +274,7 @@ function HeroBanner({
       {badge && (
         <div className="absolute bottom-6 right-6 flex flex-col items-end">
           <span className="text-2xl font-semibold tabular-nums text-white drop-shadow md:text-3xl">
-            {badgeCount}
+            {badgeCount.toLocaleString()}
             {badge.suffix ?? ''}
           </span>
           <span className="text-[11px] uppercase tracking-widest text-white/70">{badge.label}</span>
@@ -269,14 +309,14 @@ function BareHero({
     <div>
       <h1 className="text-ink text-3xl font-semibold md:text-4xl">{title}</h1>
       {(date || (links && links.length > 0)) && (
-        <div className="mt-1.5 flex items-center gap-3">
+        <div className="mt-1.5 flex flex-wrap items-center gap-3">
           {date && (
             <span className="text-ink-muted text-sm">
               {formatMonthYear(date)}
             </span>
           )}
           {links && links.length > 0 && (
-            <div className="flex items-center gap-2.5">
+            <div className="flex flex-wrap items-center gap-2">
               {links.map((link) => (
                 <IconLink key={link.label} href={link.url} label={link.label} icon={link.icon} />
               ))}
@@ -303,7 +343,7 @@ function BareHero({
       {badge && (
         <div className="mt-6 flex items-baseline gap-2">
           <span className="text-ink text-3xl font-semibold tabular-nums">
-            {badgeCount}
+            {badgeCount.toLocaleString()}
             {badge.suffix ?? ''}
           </span>
           <span className="text-ink-muted text-xs uppercase tracking-widest">{badge.label}</span>
@@ -348,7 +388,11 @@ export default function ProjectDetail() {
         project.stackedMedia ? (
           /* Hero — gallery full-width above the title, single column */
           <div className="space-y-6">
-            <ScreenshotGallery shots={project.screenshots!} aspect={project.screenshotAspect} fullWidth />
+            {project.screenshotRow ? (
+              <ScreenshotRow shots={project.screenshots!} />
+            ) : (
+              <ScreenshotGallery shots={project.screenshots!} aspect={project.screenshotAspect} fullWidth />
+            )}
             <BareHero
               title={project.title}
               description={project.description}

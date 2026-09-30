@@ -9,11 +9,8 @@ type Commit = { message: string; repo: string; repoUrl: string; commitUrl: strin
 import { featuredProjects } from '../lib/data';
 import Experience from '../components/Experience';
 import Featured from '../components/Featured';
-import Snake from '../components/bento/Snake';
 import ClickerBox from "../components/bento/ClickerBox";
 import SpotifyBox from '../components/bento/SpotifyBox';
-import FunFactsBox from '../components/bento/FunFactsBox';
-import PixelCanvas from '../components/bento/PixelCanvas';
 
 export default function Home() {
   const [commits, setCommits] = useState<Commit[] | null>(null);
@@ -34,9 +31,8 @@ export default function Home() {
         </h1>
 
         <p className="text-ink-secondary max-w-prose text-base leading-relaxed">
-          I'm a software developer who likes building things that actually matter. I write
-          code in TypeScript, Python, and whatever the job calls for. Currently open to interesting
-          opportunities, feel free to{' '}
+          I'm a junior at Boston College studying Computer Science and Math interested in 
+          backend systems, cloud infrastructure, and mobile app development.{' '}
           <a href={`mailto:${Site.out.email}`} className="link">reach out</a>.
         </p>
 
@@ -84,14 +80,8 @@ export default function Home() {
           {/* Box 2: Spotify */}
           <SpotifyBox />
 
-          {/* Box 3: Snake */}
-          <Snake />
-
-          {/* Box 4: Pixel Canvas */}
-          <PixelCanvas />
-
-          {/* Box 5: Recent Commits */}
-          <div className="border-hairline bg-paper rounded-xl border p-4 md:col-span-2 flex flex-col">
+          {/* Box 3: Recent Commits */}
+          <div className="border-hairline bg-paper rounded-xl border p-4 sm:col-span-2 flex flex-col">
             <div className="text-ink mb-3 flex items-center justify-between gap-2 text-sm">
               <h3 className="flex items-center gap-2 font-semibold">
                 <IconActivity size={16} className="text-mark" />
@@ -139,11 +129,6 @@ export default function Home() {
             >
               <span className="sweep sweep-mint text-ink">View on GitHub</span> <IconExternalLink size={12} />
             </a>
-          </div>
-
-          {/* Box 6: Fun Facts */}
-          <div className="sm:col-span-2">
-            <FunFactsBox />
           </div>
         </div>
       </section>

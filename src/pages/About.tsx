@@ -18,15 +18,22 @@ export default function About() {
 
           <div className="space-y-4 md:col-span-2">
             <p className="text-ink-secondary text-base leading-relaxed">
-              <b className="text-ink">Hey!</b> I'm Austin Chan-Orsini, a software developer
-              based in [your city]. I enjoy building projects that are useful, interesting,
-              or at minimum look cool.
+              <b className="text-ink">Hi, I'm Austin!</b> I grew up in New York City and am now a junior at Boston College studying Computer Science and Mathematics.
+
             </p>
 
             <p className="text-ink-secondary text-base leading-relaxed">
-              I work primarily with TypeScript and React on the frontend, Python and Go
-              on the backend. When I'm not coding I'm [your hobbies here].
+              Growing up, I loved solving problems which drew me to puzzles and competing in chess tournaments. I also loved playing sports and throughout the years competed in ultimate frisbee, table tennis, soccer, baseball, basketball, and track. I first got into programming in middle school through Scratch, and in high school, that curiosity turned into building games with Roblox and Unity.
             </p>
+            <p className="text-ink-secondary text-base leading-relaxed">
+These days, I'm most interested in backend systems, cloud infrastructure, and mobile development. I especially enjoy building projects that solve problems I encounter in my own life or that can make something easier for other people. That mindset has pushed me to explore new technologies and take ideas from something I wish existed to something I can actually use.
+            </p>
+            <p className="text-ink-secondary text-base leading-relaxed">
+Besides coding, I also try to stay involved around campus. I work as an IT consultant at the library, helping students and faculty troubleshoot technical problems, and as a student ambassador at the McMullen Museum. I'm also involved with Boston College's Computer Science Society and various cultural organizations on campus.
+            </p>
+                        <p className="text-ink-secondary text-base leading-relaxed">
+Outside of school, you'll usually find me at the gym, rock climbing, playing chess, videogames, speedcubing, or exploring my interest in cinematography. I like having a lot of different things to learn and constantly getting better at things.            </p>
+
 
             <p className="text-ink-secondary text-base leading-relaxed">
               Feel free to{' '}

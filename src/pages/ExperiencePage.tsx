@@ -1,5 +1,17 @@
 import { IconBriefcase, IconSchool, IconUsers } from '@tabler/icons-react';
-import { experiences, education, leadership, technicalSkills } from '../lib/data';
+import { experiences, education, leadership } from '../lib/data';
+
+function Tags({ items }: { items: string[] }) {
+  return (
+    <div className="mt-4 flex flex-wrap gap-1.5">
+      {items.map((t) => (
+        <span key={t} className="bg-bar-track text-ink-muted rounded px-2 py-0.5 text-xs">
+          {t}
+        </span>
+      ))}
+    </div>
+  );
+}
 
 export default function ExperiencePage() {
   return (
@@ -35,15 +47,6 @@ export default function ExperiencePage() {
                 {ed.location && <span>{ed.location}</span>}
                 {ed.gpa && <span>GPA: {ed.gpa}</span>}
               </div>
-              {ed.coursework && ed.coursework.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {ed.coursework.map((c) => (
-                    <span key={c} className="bg-bar-track text-ink-muted rounded px-2 py-0.5 text-xs">
-                      {c}
-                    </span>
-                  ))}
-                </div>
-              )}
             </div>
           ))}
         </div>
@@ -77,14 +80,8 @@ export default function ExperiencePage() {
                 <span>{exp.role}</span>
                 {exp.location && <span className="text-ink-muted text-xs self-center">{exp.location}</span>}
               </div>
-              <ul className="mt-3 space-y-1.5">
-                {exp.bullets.map((b) => (
-                  <li key={b} className="text-ink-secondary flex gap-2 text-sm leading-relaxed">
-                    <span className="text-mark mt-1.5 h-1 w-1 shrink-0 rounded-full bg-current" />
-                    <span>{b}</span>
-                  </li>
-                ))}
-              </ul>
+              <p className="text-ink-secondary mt-3 text-sm leading-relaxed">{exp.summary}</p>
+              <Tags items={exp.tags} />
             </div>
           ))}
         </div>
@@ -104,35 +101,8 @@ export default function ExperiencePage() {
                 <span className="text-ink-muted text-xs whitespace-nowrap">{role.period}</span>
               </div>
               <p className="text-ink-secondary mt-1 text-sm">{role.role}</p>
-              <ul className="mt-3 space-y-1.5">
-                {role.bullets.map((b) => (
-                  <li key={b} className="text-ink-secondary flex gap-2 text-sm leading-relaxed">
-                    <span className="text-mark mt-1.5 h-1 w-1 shrink-0 rounded-full bg-current" />
-                    <span>{b}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Technical Skills ─────────────────────────────────────────────── */}
-      <section className="space-y-4">
-        <h2 className="text-ink text-lg font-semibold">Technical Skills</h2>
-        <div className="border-hairline bg-paper divide-hairline divide-y rounded-xl border">
-          {Object.entries(technicalSkills).map(([category, items]) => (
-            <div key={category} className="flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:gap-4">
-              <span className="text-ink-muted w-32 shrink-0 text-xs font-semibold uppercase tracking-wider">
-                {category}
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {items.map((item) => (
-                  <span key={item} className="bg-bar-track text-ink-muted rounded px-2 py-0.5 text-xs">
-                    {item}
-                  </span>
-                ))}
-              </div>
+              <p className="text-ink-secondary mt-3 text-sm leading-relaxed">{role.summary}</p>
+              {role.tags && <Tags items={role.tags} />}
             </div>
           ))}
         </div>

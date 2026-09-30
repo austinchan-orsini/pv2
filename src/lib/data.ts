@@ -5,9 +5,11 @@ export type Project = {
   date: string;
   tags: string[];
   image?: { url: string; alt: string };
-  screenshots?: { url: string; alt: string }[];
+  screenshots?: { url: string; alt: string; aspect?: string }[];
   screenshotAspect?: string;
   stackedMedia?: boolean;
+  // With stackedMedia: show all screenshots side by side (each needs `aspect`) instead of a carousel
+  screenshotRow?: boolean;
   links?: { label: string; url: string; icon?: string }[];
   featured?: boolean;
   // Detail page content
@@ -31,7 +33,8 @@ export type Experience = {
   period: string;
   location?: string;
   url?: string;
-  bullets: string[];
+  summary: string;
+  tags: string[];
 };
 
 export type Education = {
@@ -40,7 +43,6 @@ export type Education = {
   period: string;
   location?: string;
   gpa?: string;
-  coursework?: string[];
   url?: string;
 };
 
@@ -48,7 +50,8 @@ export type LeadershipRole = {
   org: string;
   role: string;
   period: string;
-  bullets: string[];
+  summary: string;
+  tags?: string[];
 };
 
 // ─── Education ──────────────────────────────────────────────────────────────
@@ -60,7 +63,6 @@ export const education: Education[] = [
     period: 'Expected May 2028',
     location: 'Chestnut Hill, MA',
     gpa: '3.6/4.0',
-    coursework: ['Data Structures & Algorithms', 'Operating Systems', 'Networks', 'Software Engineering'],
     url: 'https://www.bc.edu',
   },
 ];
@@ -75,23 +77,19 @@ export const experiences: Experience[] = [
     period: 'May 2026 – Jul 2026',
     location: 'Boston, MA',
     url: 'https://www.libertymutual.com',
-    bullets: [
-      'Built end-to-end AWS RDS snapshot infrastructure using KMS encryption, enabling database recovery/recreation',
-      'Shipped a Python microservice on AWS ECS with Datadog APM, reducing debugging time by 23%',
-      'Containerized application tests with Docker, resolving dependency conflicts that cut CI build failure rate by 72%',
-      'Improved DevOps workflows, restoring code-quality reporting across 39 repos by debugging GitHub Actions CI/CD',
-    ],
+    summary:
+      'I worked on the Global Alternative Markets engineering team within Liberty Mutual Investments, building cloud infrastructure and data systems that support private investment operations. My work ranged from AWS database infrastructure and CI/CD modernization to adding observability with Datadog across financial data workflows. I spent much of the summer working in a large production codebase, collaborating with engineers across teams and shipping changes across dozens of repositories.',
+    tags: ['AWS', 'Python', 'Docker', 'GitHub Actions', 'Datadog', 'PostgreSQL'],
   },
   {
     company: 'Boston College Physics Department',
     role: 'Undergraduate Research Fellow',
     period: 'Sep 2025 – Feb 2026',
     location: 'Chestnut Hill, MA',
-    url: 'https://www.bc.edu/bc-web/schools/mcas/departments/physics.html',
-    bullets: [
-      'Automated 2D bilayer simulation pipelines with Python and Bash to generate training data for ML models',
-      'Trained a PyTorch CNN to identify structural patterns relating to superconductivity, achieving 73% accuracy',
-    ],
+    url: 'https://www.ziyanzhu.com/',
+    summary:
+      'I worked with a computational physics research group studying structural patterns in 2D bilayer materials and their relationship to superconductivity. I built Python and Bash pipelines to automate simulations and generate datasets, then trained a PyTorch convolutional neural network to identify patterns within the resulting structures. The experience gave me my first opportunity to apply software engineering and machine learning to an open-ended research problem.',
+    tags: ['Python', 'Bash', 'PyTorch', 'Machine Learning'],
   },
   {
     company: 'NYC Department of Design and Construction',
@@ -99,20 +97,18 @@ export const experiences: Experience[] = [
     period: 'Jun 2025 – Aug 2025',
     location: 'Queens, NY',
     url: 'https://www.nyc.gov/ddc',
-    bullets: [
-      'Engineered an Angular internal contract dashboard integrated with a REST API, reducing load time by 42%',
-      'Debugged API data with Postman and SQL stored procedures, ensuring 100% consistency across backend and UI',
-    ],
+    summary:
+      'I worked on an internal software team building tools used to manage city construction contracts and project data. I contributed to an Angular contract dashboard connected to an existing REST API and worked across the frontend and backend to diagnose data inconsistencies using Postman and SQL. It was my first experience developing within a larger production application and working with an established codebase.',
+    tags: ['Angular', 'TypeScript', 'REST APIs', 'SQL', 'Postman'],
   },
   {
     company: 'Flora Health',
     role: 'Data & Analytics Intern',
     period: 'May 2025 – Aug 2025',
     location: 'Part-Time, Remote',
-    bullets: [
-      'Streamlined Alteryx workflows to clean multi-source healthcare campaign data, improving data consistency',
-      'Built an AI-powered NLP summarizer linking pharma news with campaign metrics, reducing reporting time 60%',
-    ],
+    summary:
+      'I worked with healthcare marketing data from multiple sources, building and improving workflows used for campaign reporting and analysis. Alongside automating data processing in Alteryx, I experimented with using NLP to connect pharmaceutical news with campaign performance data and reduce the manual work involved in producing reports.',
+    tags: ['Alteryx', 'Python', 'NLP', 'Data Analytics'],
   },
 ];
 
@@ -123,30 +119,19 @@ export const leadership: LeadershipRole[] = [
     org: 'AWS Cloud Club',
     role: 'Co-Founder; Core Team',
     period: 'Jan 2026 – Present',
-    bullets: [
-      "Co-founded BC's AWS Cloud Club from scratch, growing to 40+ active members within the first semester",
-      'Organized hands-on workshops covering EC2, S3, Lambda, and IAM, giving students practical cloud experience',
-    ],
+    summary:
+      "I co-founded BC's AWS Cloud Club to give students a place to get hands-on with the cloud, something most of our coursework doesn't touch. We run workshops where members actually spin up and wire together services like EC2, S3, Lambda, and IAM instead of just hearing about them. Building a technical community from zero has meant figuring out how to make sessions approachable for beginners while still being worth showing up for, and we grew to 40+ active members in the first semester.",
+    tags: ['AWS', 'Workshops', 'Community'],
   },
   {
     org: 'Computer Science Society',
     role: 'Technology Team Lead',
     period: 'Feb 2025 – Present',
-    bullets: [
-      'Led a cross-functional student open-source team, establishing code review standards for production deployments',
-      'Built bccss.dev + Hack the Heights (React/Next.js, Tailwind), improving performance & attracting 200+ students',
-    ],
+    summary:
+      "I lead the CSS technology team, a group of student developers who build and maintain the society's open-source projects. That includes bccss.dev and the site for Hack the Heights, BC's hackathon, which drew 200+ students. A big part of the role is less about writing code myself and more about setting up code review standards and processes so a rotating team of students can ship to production with confidence.",
+    tags: ['React', 'Next.js', 'Tailwind', 'Open Source'],
   },
 ];
-
-// ─── Technical Skills ───────────────────────────────────────────────────────
-
-export const technicalSkills = {
-  Languages: ['Python', 'JavaScript', 'TypeScript', 'SQL', 'Java', 'C/C++', 'HTML/CSS'],
-  Frameworks: ['React', 'Next.js', 'Node.js', 'Django', 'React Native', 'Angular', 'Express.js', 'Tailwind'],
-  Tools: ['Git', 'AWS', 'Docker', 'Snowflake', 'Datadog', 'Postman', 'Expo'],
-  Certifications: ['AWS Certified Cloud Practitioner'],
-};
 
 // ─── Projects ─────────────────────────────────────────────────────────────────
 
@@ -155,19 +140,20 @@ export const projects: Project[] = [
     slug: 'job-pulse',
     title: 'Job Pulse',
     description:
-      'A Discord bot (with optional SMS) that watches GitHub job-board repos like SimplifyJobs and pings you the instant a new role is posted. No more refreshing README tables hoping to catch one before it fills up.',
+      'A Discord bot (with optional SMS) that watches GitHub job boards and pings you the instant a new role is posted. Currently used by over 1,500 members across 4 Discord servers.',
     date: '2026-06-01',
     tags: ['JavaScript', 'Node.js', 'Discord.js', 'Twilio', 'SQLite', 'Express'],
     featured: true,
     gradientVars: ['--mint', '--butter', '--coral', '--mark'],
-    image: { url: '/projects/jobpulse/demo.png', alt: 'Job Pulse Discord bot posting new internship alerts from SimplifyJobs and Peak in a #job-alerts channel' },
+    image: { url: '/projects/jobpulse/cover.jpg', alt: 'Job Pulse cover: Discord logo with X eyes and a notification bell' },
     screenshots: [
-      { url: '/projects/jobpulse/desc.png', alt: 'Job Pulse\'s Discord app profile: "Get alerted when jobs are posted to github repos so you can get rejected faster!"' },
-      { url: '/projects/jobpulse/demo.png', alt: 'Job Pulse Discord bot posting new internship alerts from SimplifyJobs and Peak in a #job-alerts channel' },
+      { url: '/projects/jobpulse/demo.png', alt: 'Job Pulse Discord bot posting new internship alerts from SimplifyJobs and Peak in a #job-alerts channel', aspect: '1245 / 877' },
+      { url: '/projects/jobpulse/desc.png', alt: 'Job Pulse\'s Discord app profile: "Get alerted when jobs are posted to github repos so you can get rejected faster!"', aspect: '367 / 576' },
     ],
-    screenshotAspect: '367 / 576',
+    stackedMedia: true,
+    screenshotRow: true,
     longDescription:
-      "Boards like SimplifyJobs/Summer2026-Internships and speedyapply/2027-SWE-College-Jobs are just markdown tables in a GitHub README, updated by maintainers dozens of times a day. There's no RSS feed, no API, and the best roles fill up within hours of posting. Job Pulse watches the underlying repo instead of the page: it polls for new commits, diffs the job table to find rows that weren't there before, and pushes an alert the moment one appears, over a shared Discord bot you can add to your own server in one click, or SMS and a web dashboard if you self-host.",
+      "GitHub job boards are just markdown tables in a README, updated by maintainers dozens of times a day. There's no RSS feed, no API, and the best roles fill up within hours of posting. Job Pulse watches the underlying repo instead of the page: it polls for new commits, diffs the job table to find rows that weren't there before, and pushes an alert the moment one appears, over a shared Discord bot you can add to your own server in one click, or SMS and a web dashboard if you self-host.",
     features: [
       {
         title: 'One-click Discord bot',
@@ -187,10 +173,11 @@ export const projects: Project[] = [
       },
       {
         title: 'Multi-format parsing',
-        description: 'Handles both the SimplifyJobs and SpeedyApply markdown table formats used across popular internship and new-grad boards.',
+        description: 'Handles the different markdown table formats used across popular internship and new-grad job boards.',
       },
     ],
     links: [
+      { label: 'Add to Discord', url: 'https://top.gg/bot/1515413567346835516', icon: 'discord' },
       { label: 'View on GitHub', url: 'https://github.com/austinchan-orsini/gh-job-alerts', icon: 'github' },
     ],
   },
@@ -204,7 +191,7 @@ export const projects: Project[] = [
     tags: ['TypeScript', 'React', 'Firebase', 'Framer Motion'],
     featured: true,
     gradientVars: ['--butter', '--coral', '--mark', '--mint'],
-    image: { url: '/projects/streak/daily-progress.png', alt: 'Streak daily progress screen with core tasks and custom tasks side by side' },
+    image: { url: '/projects/streak/cover.jpg', alt: 'Streak cover: 75 Hard challenge tracker web app with today and map screens' },
     screenshots: [
       { url: '/projects/streak/landing.png', alt: 'Streak landing page: "build the habit, every single day"' },
       { url: '/projects/streak/daily-progress.png', alt: 'Daily progress screen showing core tasks and custom tasks with a completion bar' },
@@ -258,12 +245,14 @@ export const projects: Project[] = [
     tags: ['JavaScript', 'Chrome Extension', 'Manifest V3', 'Chart.js'],
     featured: false,
     gradientVars: ['--coral', '--mark', '--mint', '--butter'],
-    image: { url: '/projects/zetamac/overview.png', alt: 'Zetamac Stats Tracker overview panel showing games played, average score, top scores, and a score history chart' },
+    image: { url: '/projects/zetamac/cover.jpg', alt: 'Zetamac Stats Tracker cover: white Z on green' },
     screenshots: [
-      { url: '/projects/zetamac/overview.png', alt: 'Overview tab: lifetime games played, average score, last game, top 3 scores, and a score-history chart with running average' },
-      { url: '/projects/zetamac/subtraction.png', alt: 'Subtraction tab: average response time compared between problems that require borrowing and problems that don’t' },
-      { url: '/projects/zetamac/division.png', alt: 'Division tab: average response time for every divisor, color-coded green to red from fastest to slowest' },
+      { url: '/projects/zetamac/overview.png', alt: 'Overview tab: lifetime games played, average score, last game, top 3 scores, and a score-history chart with running average', aspect: '765 / 1199' },
+      { url: '/projects/zetamac/subtraction.png', alt: 'Subtraction tab: average response time compared between problems that require borrowing and problems that don’t', aspect: '762 / 805' },
+      { url: '/projects/zetamac/division.png', alt: 'Division tab: average response time for every divisor, color-coded green to red from fastest to slowest', aspect: '763 / 1067' },
     ],
+    stackedMedia: true,
+    screenshotRow: true,
     heroBadge: { label: 'Chrome Users', value: 200, suffix: '+' },
     longDescription:
       "I wanted to know which arithmetic I was actually slow at instead of just watching my Zetamac score go up. This started as a content script that logs every question and answer, and grew into a full stats dashboard the extension injects right next to the game: an overview with lifetime and rolling-window views, separate tabs for each operation, and color-coded breakdowns down to the individual number (which divisors trip me up, which times tables are automatic, whether a subtraction problem needs borrowing). It's live on the Chrome Web Store with 200+ installs.",
@@ -301,12 +290,12 @@ export const projects: Project[] = [
     slug: 'padly',
     title: 'Padly',
     description:
-      'A Google-authenticated housing marketplace for Boston College students: map-based listings, real-time chat, and roommate matching, built with a 9-person team for a software engineering course.',
+      'A Google-authenticated housing marketplace for Boston College students: map-based listings, real-time chat, and roommate matching, built with a 6-person team for a software engineering course.',
     date: '2026-04-01',
     tags: ['Django', 'Python', 'Django Channels', 'Team Project'],
     featured: false,
     gradientVars: ['--mark', '--mint', '--butter', '--coral'],
-    image: { url: '/projects/padly/listings.jpg', alt: 'Padly listings page with a map of nearby sublets and a filterable list view' },
+    image: { url: '/projects/padly/home.jpg', alt: 'Padly landing page: "Find a place near campus," rentals and subleases near Boston College' },
     screenshots: [
       { url: '/projects/padly/home.jpg', alt: 'Padly landing page: "Find a place near campus," rentals and subleases near Boston College' },
       { url: '/projects/padly/listings.jpg', alt: 'Listings page with a MapLibre map of nearby sublets alongside a filterable list view' },
@@ -317,7 +306,7 @@ export const projects: Project[] = [
     screenshotAspect: '8 / 5',
     stackedMedia: true,
     longDescription:
-      "Padly was a semester-long team project for my software engineering course (CSCI3356): a housing and subletting marketplace for Boston College students, built by a 9-person team over 269 commits. It's Google-OAuth-only with no password fallback, with role-based access for students, realtors, moderators, support, and admins; real-time chat over WebSockets via Django Channels; verified-address listings geocoded through the Geoapify API and browsable on a map; and a full moderation and reporting pipeline behind it, backed by roughly 440 automated tests. My own commits were a small slice of that, mostly the listing-creation form fields and fixes to the dashboard and profile toggle, while the team collectively built out auth, messaging, moderation, and the test suite.",
+      "Padly was a semester-long team project for my software engineering course (CSCI3356): a housing and subletting marketplace for Boston College students, built by a 6-person team over 269 commits. It's Google-OAuth-only with no password fallback, with role-based access for students, realtors, moderators, support, and admins; real-time chat over WebSockets via Django Channels; verified-address listings geocoded through the Geoapify API and browsable on a map; and a full moderation and reporting pipeline behind it, backed by roughly 440 automated tests. My own commits were a small slice of that, mostly the listing-creation form fields and fixes to the dashboard and profile toggle, while the team collectively built out auth, messaging, moderation, and the test suite.",
     realWorldValue:
       "Off-campus subletting at BC mostly happens through sprawling Facebook groups and group chats with no verification: no way to know if a listing address is real, who you're actually messaging, or whether a \"landlord\" is who they say they are. Padly ties every account to a Google-verified BC identity, geocodes listings against a real address before they go live, and gives moderators an actual reporting and investigation workflow instead of hoping people self-police a group chat. Trust and verification at that scale is the kind of infrastructure problem a class project doesn't usually get to touch, which is what made it worth a team's whole semester.",
     features: [
